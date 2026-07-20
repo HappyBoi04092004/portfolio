@@ -20,6 +20,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [visibleSteps, setVisibleSteps] = useState<string[]>([]);
   const [isFinished, setIsFinished] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [isLaunched, setIsLaunched] = useState(false);
 
   useEffect(() => {
     if (currentStep < steps.length) {
@@ -109,7 +110,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       )}
 
       {/* Pulsing button when loading finishes to prompt entering */}
-      {isFinished && (
+      {isFinished && !isLaunched && (
         <motion.div
           className="fixed inset-0 bg-[#050816]/95 z-50 flex items-center justify-center font-mono"
           initial={{ opacity: 0 }}
@@ -131,7 +132,10 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
             </p>
             
             <button
-              onClick={onComplete}
+              onClick={() => {
+                setIsLaunched(true);
+                onComplete();
+              }}
               className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl font-bold shadow-lg hover:shadow-indigo-500/25 border border-indigo-400/20 hover:border-indigo-400/40 transition-all transform hover:-translate-y-0.5 active:translate-y-0 duration-300"
             >
               LAUNCH PORTFOLIO
