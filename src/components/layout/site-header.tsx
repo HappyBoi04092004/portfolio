@@ -1,18 +1,19 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Terminal, Sparkles } from 'lucide-react';
+import { Home, User, FolderGit2, Cpu, Award, Mail, Star, Terminal, Menu, X, GitFork } from 'lucide-react';
 import ThemeSwitcher from '@/components/ui/theme-switcher';
 import { portfolioConfig } from '@/config/portfolio';
 import { cn } from '@/lib/utils';
 
 const links = [
-  { href: '#about', label: 'Giới thiệu' },
-  { href: '#skills', label: 'Kỹ năng' },
-  { href: '#projects', label: 'Dự án' },
-  { href: '#experience', label: 'Kinh nghiệm' },
-  { href: '#certificates', label: 'Chứng chỉ' },
-  { href: '#contact', label: 'Liên hệ' },
+  { href: '#hero', label: 'Home', icon: Home },
+  { href: '#about', label: 'About', icon: User },
+  { href: '#skills', label: 'Skillset', icon: Cpu },
+  { href: '#projects', label: 'Projects', icon: FolderGit2 },
+  { href: '#experience', label: 'Experience', icon: Award },
+  { href: '#certificates', label: 'Certificates', icon: Award },
+  { href: '#contact', label: 'Contact', icon: Mail },
 ];
 
 interface SiteHeaderProps {
@@ -37,58 +38,64 @@ export default function SiteHeader({ onOpenTerminal }: SiteHeaderProps) {
     };
   }, [open]);
 
-  const firstName = portfolioConfig.owner.name.split(' ')[0];
-
   return (
     <header
       className={cn(
         'fixed top-0 inset-x-0 z-50 nav-shell pointer-events-auto transition-all duration-300',
-        scrolled && 'shadow-[0_12px_40px_-15px_rgba(0,0,0,0.6)] bg-[color-mix(in_srgb,var(--background)_90%,transparent)] border-b border-[var(--border-strong)]'
+        scrolled && 'shadow-[0_10px_30px_-10px_rgba(12,5,19,0.9)] bg-[rgba(12,5,19,0.92)] border-b border-[rgba(197,115,230,0.35)] backdrop-blur-2xl'
       )}
     >
       <div className="section-shell h-full flex items-center justify-between gap-4">
-        {/* Logo */}
+        {/* Brand Logo */}
         <a
           href="#"
-          className="group flex items-center gap-2.5 font-bold text-base md:text-lg tracking-tight shrink-0"
+          className="group flex items-center gap-2 font-black text-xl tracking-tight shrink-0"
           onClick={() => setOpen(false)}
         >
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 flex items-center justify-center text-white text-xs font-black shadow-md shadow-indigo-500/30 group-hover:scale-105 transition-transform">
-            HP
-          </div>
-          <span className="text-gradient">{firstName}</span>
-          <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-[color-mix(in_srgb,var(--foreground)_6%,transparent)] border border-[var(--border)] text-muted hidden sm:inline-block">
-            Software Dev
+          <span className="text-[#c770f0] group-hover:scale-110 transition-transform inline-block">
+            HP.
           </span>
         </a>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-1 p-1.5 rounded-full border border-[var(--border)] bg-[color-mix(in_srgb,var(--background)_60%,transparent)] backdrop-blur-md">
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="px-3.5 py-1.5 text-xs font-semibold text-muted hover:text-[var(--foreground)] rounded-full hover:bg-[color-mix(in_srgb,var(--foreground)_8%,transparent)] transition-all"
-            >
-              {link.label}
-            </a>
-          ))}
+        {/* Desktop Navigation Links with Icons */}
+        <nav className="hidden lg:flex items-center gap-1">
+          {links.map((link) => {
+            const Icon = link.icon;
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                className="px-3.5 py-2 text-sm font-semibold text-white/90 hover:text-[#c770f0] rounded-xl hover:bg-purple-500/10 flex items-center gap-2 transition-all relative group"
+              >
+                <Icon className="w-4 h-4 text-purple-400 group-hover:text-[#c770f0] transition-colors" />
+                <span>{link.label}</span>
+              </a>
+            );
+          })}
         </nav>
 
         {/* Action Items */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
+          {/* GitHub Star Button Soumyajit style */}
+          <a
+            href={portfolioConfig.owner.github}
+            target="_blank"
+            rel="noreferrer"
+            className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-purple-600/20 border border-purple-500/40 text-[#c770f0] hover:bg-purple-600/30 hover:border-purple-500/70 hover:shadow-[0_0_20px_rgba(199,112,240,0.4)] transition-all"
+            title="Star on GitHub"
+          >
+            <GitFork className="w-3.5 h-3.5" />
+            <Star className="w-3.5 h-3.5 fill-[#c770f0]" />
+          </a>
+
           {onOpenTerminal && (
             <button
               type="button"
               onClick={onOpenTerminal}
-              className="hidden sm:flex items-center gap-2 px-3 py-2 text-xs font-mono font-semibold rounded-xl border border-[var(--border)] text-muted hover:text-[var(--foreground)] hover:border-[color-mix(in_srgb,var(--accent)_40%,var(--border))] bg-[color-mix(in_srgb,var(--foreground)_3%,transparent)] transition-all"
-              title="Mở Command Terminal (Ctrl+/)"
+              className="hidden sm:flex items-center gap-2 px-3 py-2 text-xs font-mono font-semibold rounded-xl border border-[var(--border)] text-muted hover:text-[#c770f0] hover:border-purple-500/50 bg-purple-500/5 transition-all"
+              title="Open Command Terminal (Ctrl+/)"
             >
-              <Terminal className="w-3.5 h-3.5 text-[var(--accent-soft)]" />
-              <span>Terminal</span>
-              <kbd className="hidden md:inline-block px-1.5 py-0.5 text-[10px] font-sans rounded bg-[color-mix(in_srgb,var(--foreground)_10%,transparent)] text-muted">
-                ⌘/
-              </kbd>
+              <Terminal className="w-3.5 h-3.5 text-[#c770f0]" />
             </button>
           )}
 
@@ -96,45 +103,59 @@ export default function SiteHeader({ onOpenTerminal }: SiteHeaderProps) {
 
           <button
             type="button"
-            className="lg:hidden p-2.5 rounded-xl border border-[var(--border)] text-muted hover:text-[var(--foreground)] hover:bg-[color-mix(in_srgb,var(--foreground)_6%,transparent)] transition-colors"
-            aria-label={open ? 'Đóng menu' : 'Mở menu'}
+            className="lg:hidden p-2.5 rounded-xl border border-[var(--border)] text-muted hover:text-white hover:bg-purple-500/10 transition-colors"
+            aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {open ? <X className="w-5 h-5 text-[#c770f0]" /> : <Menu className="w-5 h-5 text-[#c770f0]" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {open ? (
-        <div className="lg:hidden border-t border-[var(--border)] bg-[color-mix(in_srgb,var(--background)_96%,transparent)] backdrop-blur-2xl">
+        <div className="lg:hidden border-t border-[var(--border)] bg-[#0c0513]/98 backdrop-blur-2xl">
           <nav className="section-shell py-6 flex flex-col gap-2">
-            {links.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="px-4 py-3 text-sm font-semibold rounded-xl hover:bg-[color-mix(in_srgb,var(--foreground)_8%,transparent)] transition-colors flex items-center justify-between"
-                onClick={() => setOpen(false)}
-              >
-                <span>{link.label}</span>
-                <span className="text-xs text-muted font-mono">→</span>
-              </a>
-            ))}
+            {links.map((link) => {
+              const Icon = link.icon;
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="px-4 py-3 text-base font-semibold rounded-xl hover:bg-purple-500/10 text-white/90 hover:text-[#c770f0] transition-colors flex items-center gap-3"
+                  onClick={() => setOpen(false)}
+                >
+                  <Icon className="w-5 h-5 text-[#c770f0]" />
+                  <span>{link.label}</span>
+                </a>
+              );
+            })}
 
-            {onOpenTerminal && (
-              <button
-                type="button"
-                onClick={() => {
-                  setOpen(false);
-                  onOpenTerminal();
-                }}
-                className="mt-2 px-4 py-3 text-sm font-mono font-bold rounded-xl border border-[color-mix(in_srgb,var(--accent)_40%,var(--border))] text-[var(--accent-soft)] bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] flex items-center gap-2"
+            <div className="pt-4 flex items-center gap-3">
+              <a
+                href={portfolioConfig.owner.github}
+                target="_blank"
+                rel="noreferrer"
+                className="flex-1 py-3 px-4 rounded-xl text-xs font-bold bg-purple-600/20 border border-purple-500/40 text-[#c770f0] flex items-center justify-center gap-2"
               >
-                <Terminal className="w-4 h-4" />
-                <span>Mở Command Terminal</span>
-              </button>
-            )}
+                <Star className="w-4 h-4 fill-[#c770f0]" />
+                <span>Star on GitHub</span>
+              </a>
+
+              {onOpenTerminal && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    onOpenTerminal();
+                  }}
+                  className="p-3 rounded-xl border border-purple-500/40 text-[#c770f0] bg-purple-500/10"
+                >
+                  <Terminal className="w-5 h-5" />
+                </button>
+              )}
+            </div>
           </nav>
         </div>
       ) : null}

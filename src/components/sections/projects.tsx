@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { ExternalLink, X, ArrowUpRight, Code, ShieldCheck, Cpu } from 'lucide-react';
+import { ExternalLink, X, ArrowUpRight, ShieldCheck, Cpu } from 'lucide-react';
 import { Github } from '@/components/ui/brand-icons';
 import SectionHeader from '@/components/ui/section-header';
 import { portfolioConfig, Project } from '@/config/portfolio';
@@ -22,11 +22,13 @@ export default function Projects() {
 
   return (
     <section id="projects" ref={ref} className="section-block section-shell pointer-events-none">
-      <div className="pointer-events-auto">
+      <div className="pointer-events-auto space-y-12">
+        
+        {/* Soumyajit Section Header */}
         <SectionHeader
-          eyebrow="Dự án"
-          title="Case Study & Sản phẩm Nổi bật"
-          description="Các dự án tiêu biểu minh họa tư duy thiết kế hệ thống, tối ưu hiệu năng và giải quyết bài toán quy mô lớn."
+          eyebrow="Portfolio Showcase"
+          title="My Recent Works"
+          description="Here are a few projects I've worked on recently — built with Go, Flutter, NestJS, and Cloud Architecture."
         />
 
         <div className="grid md:grid-cols-2 gap-6">
@@ -36,26 +38,25 @@ export default function Projects() {
               initial={{ opacity: 0, y: 24 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              onClick={() => setSelected(project)}
-              className="card card-interactive p-8 text-left flex flex-col justify-between gap-6 cursor-pointer group relative overflow-hidden"
+              className="card card-interactive p-8 text-left flex flex-col justify-between gap-6 border-purple-500/30 shadow-[0_0_25px_rgba(199,112,240,0.15)] group relative overflow-hidden"
             >
               {/* Header Badge */}
               <div className="flex justify-between items-center">
-                <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-purple-500/20 text-[#c770f0] border border-purple-500/40">
                   {project.category}
                 </span>
-                <span className="text-xs font-mono text-muted-dark group-hover:text-indigo-400 transition-colors">
-                  ID: #{project.id}
+                <span className="text-xs font-mono text-muted-dark group-hover:text-[#c770f0] transition-colors">
+                  #{project.id}
                 </span>
               </div>
 
               {/* Title & Description */}
               <div className="space-y-3">
-                <h3 className="text-2xl font-bold group-hover:text-indigo-400 transition-colors flex items-center justify-between">
+                <h3 className="text-2xl font-bold text-white group-hover:text-[#c770f0] transition-colors flex items-center justify-between">
                   <span>{project.title}</span>
-                  <ArrowUpRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-indigo-400" />
+                  <ArrowUpRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-[#c770f0]" />
                 </h3>
-                <p className="text-xs font-semibold text-muted-dark font-mono">
+                <p className="text-xs font-mono font-semibold text-[#c770f0]/90">
                   {project.subtitle}
                 </p>
                 <p className="text-sm text-muted line-clamp-3 leading-relaxed">
@@ -63,25 +64,44 @@ export default function Projects() {
                 </p>
               </div>
 
-              {/* Tech Stack Pills & Footer */}
-              <div className="pt-4 border-t border-[var(--border)] flex flex-wrap items-center justify-between gap-3">
-                <div className="flex flex-wrap gap-1.5">
-                  {project.techStack.slice(0, 4).map((tech) => (
-                    <span key={tech} className="tag text-[11px]">
-                      {tech}
-                    </span>
-                  ))}
-                  {project.techStack.length > 4 && (
-                    <span className="tag text-[11px] text-indigo-400">
-                      +{project.techStack.length - 4}
-                    </span>
-                  )}
-                </div>
+              {/* Tech Stack Pills */}
+              <div className="flex flex-wrap gap-1.5 pt-2">
+                {project.techStack.map((tech) => (
+                  <span key={tech} className="tag text-[11px] font-mono border-purple-500/20 bg-purple-500/5 text-purple-200">
+                    {tech}
+                  </span>
+                ))}
+              </div>
 
-                <span className="text-xs font-semibold text-indigo-400 group-hover:underline flex items-center gap-1">
+              {/* Soumyajit Action Buttons */}
+              <div className="pt-4 border-t border-purple-500/20 flex flex-wrap items-center gap-3">
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn text-xs py-2 px-4 rounded-xl bg-purple-600/30 border border-purple-500/40 text-white hover:bg-purple-600/60 hover:shadow-[0_0_20px_rgba(199,112,240,0.5)] transition-all flex items-center gap-2"
+                >
+                  <Github className="w-4 h-4 text-[#c770f0]" />
+                  <span>GitHub</span>
+                </a>
+
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn text-xs py-2 px-4 rounded-xl bg-purple-600 border border-purple-400 text-white hover:bg-purple-500 hover:shadow-[0_0_25px_rgba(199,112,240,0.6)] transition-all flex items-center gap-2"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  <span>Demo</span>
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => setSelected(project)}
+                  className="btn text-xs py-2 px-4 rounded-xl bg-purple-500/10 border border-purple-500/30 text-[#c770f0] hover:bg-purple-500/20 transition-all ml-auto"
+                >
                   Case Study
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </span>
+                </button>
               </div>
             </motion.div>
           ))}
@@ -92,14 +112,14 @@ export default function Projects() {
       <AnimatePresence>
         {selected ? (
           <motion.div
-            className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/75 backdrop-blur-md pointer-events-auto"
+            className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/80 backdrop-blur-md pointer-events-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelected(null)}
           >
             <motion.div
-              className="w-full sm:max-w-3xl max-h-[90vh] overflow-y-auto card sm:rounded-3xl rounded-t-3xl border-[var(--border-strong)] shadow-2xl relative"
+              className="w-full sm:max-w-3xl max-h-[90vh] overflow-y-auto card sm:rounded-3xl rounded-t-3xl border-purple-500/50 shadow-2xl relative"
               initial={{ y: 40, scale: 0.95, opacity: 0 }}
               animate={{ y: 0, scale: 1, opacity: 1 }}
               exit={{ y: 24, scale: 0.95, opacity: 0 }}
@@ -112,12 +132,12 @@ export default function Projects() {
                   type="button"
                   onClick={() => setSelected(null)}
                   className="absolute top-6 right-6 p-2 rounded-full bg-black/40 text-white hover:bg-black/60 transition-colors"
-                  aria-label="Đóng"
+                  aria-label="Close"
                 >
                   <X className="w-5 h-5" />
                 </button>
                 
-                <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-widest bg-black/30 text-white/90 border border-white/20">
+                <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-widest bg-black/40 text-white/90 border border-white/20">
                   {selected.category} ARCHITECTURE
                 </span>
 
@@ -133,10 +153,10 @@ export default function Projects() {
               <div className="p-8 md:p-10 space-y-8 text-left">
                 
                 {/* Tech Stack & Action Links */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-[var(--border)]">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-purple-500/20">
                   <div className="flex flex-wrap gap-2">
                     {selected.techStack.map((tech) => (
-                      <span key={tech} className="tag text-xs font-mono font-semibold bg-indigo-500/10 text-indigo-400 border-indigo-500/20">
+                      <span key={tech} className="tag text-xs font-mono font-semibold bg-purple-500/15 text-[#c770f0] border-purple-500/30">
                         {tech}
                       </span>
                     ))}
@@ -147,36 +167,36 @@ export default function Projects() {
                       href={selected.githubUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="btn btn-secondary text-xs py-2.5"
+                      className="btn text-xs py-2.5 px-4 bg-purple-600/30 border border-purple-500/40 text-white hover:bg-purple-600/50"
                     >
-                      <Github className="w-4 h-4" />
-                      <span>GitHub Code</span>
+                      <Github className="w-4 h-4 text-[#c770f0]" />
+                      <span>GitHub</span>
                     </a>
                     <a
                       href={selected.liveUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="btn btn-primary text-xs py-2.5"
+                      className="btn text-xs py-2.5 px-4 bg-purple-600 border border-purple-400 text-white hover:bg-purple-500"
                     >
                       <ExternalLink className="w-4 h-4" />
-                      <span>Live Demo</span>
+                      <span>Demo</span>
                     </a>
                   </div>
                 </div>
 
                 {/* Detailed Sections */}
                 <div className="grid md:grid-cols-2 gap-8 text-sm">
-                  <div className="space-y-2 p-5 rounded-2xl bg-[color-mix(in_srgb,var(--foreground)_3%,transparent)] border border-[var(--border)]">
-                    <div className="flex items-center gap-2 font-bold text-base text-[var(--foreground)]">
-                      <Cpu className="w-4 h-4 text-indigo-400" />
+                  <div className="space-y-2 p-5 rounded-2xl bg-purple-500/5 border border-purple-500/20">
+                    <div className="flex items-center gap-2 font-bold text-base text-white">
+                      <Cpu className="w-4 h-4 text-[#c770f0]" />
                       <span>Kiến trúc hệ thống</span>
                     </div>
                     <p className="text-muted leading-relaxed">{selected.architecture}</p>
                   </div>
 
-                  <div className="space-y-2 p-5 rounded-2xl bg-[color-mix(in_srgb,var(--foreground)_3%,transparent)] border border-[var(--border)]">
-                    <div className="flex items-center gap-2 font-bold text-base text-[var(--foreground)]">
-                      <ShieldCheck className="w-4 h-4 text-indigo-400" />
+                  <div className="space-y-2 p-5 rounded-2xl bg-purple-500/5 border border-purple-500/20">
+                    <div className="flex items-center gap-2 font-bold text-base text-white">
+                      <ShieldCheck className="w-4 h-4 text-[#c770f0]" />
                       <span>Tóm tắt & Quy mô</span>
                     </div>
                     <p className="text-muted leading-relaxed">{selected.caseStudy}</p>
@@ -185,15 +205,15 @@ export default function Projects() {
 
                 <div className="space-y-6 text-sm">
                   <div className="space-y-2">
-                    <h4 className="font-bold text-base text-[var(--foreground)]">Thách thức kỹ thuật lớn nhất</h4>
-                    <p className="text-muted leading-relaxed p-4 rounded-2xl bg-[color-mix(in_srgb,var(--accent)_6%,transparent)] border border-[color-mix(in_srgb,var(--accent)_20%,transparent)]">
+                    <h4 className="font-bold text-base text-white">Thách thức kỹ thuật lớn nhất</h4>
+                    <p className="text-muted leading-relaxed p-4 rounded-2xl bg-purple-500/10 border border-purple-500/30">
                       {selected.challenges}
                     </p>
                   </div>
 
                   <div className="space-y-2">
-                    <h4 className="font-bold text-base text-[var(--foreground)]">Bài học kinh nghiệm rút ra</h4>
-                    <p className="text-muted leading-relaxed p-4 rounded-2xl bg-[color-mix(in_srgb,var(--accent)_6%,transparent)] border border-[color-mix(in_srgb,var(--accent)_20%,transparent)]">
+                    <h4 className="font-bold text-base text-white">Bài học kinh nghiệm rút ra</h4>
+                    <p className="text-muted leading-relaxed p-4 rounded-2xl bg-purple-500/10 border border-purple-500/30">
                       {selected.lessonsLearned}
                     </p>
                   </div>

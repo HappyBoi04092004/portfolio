@@ -40,11 +40,11 @@ function StarsBackground({ count = 800 }) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.12}
-        color="#a5b4fc"
+        size={0.14}
+        color="#c770f0"
         sizeAttenuation={true}
         transparent={true}
-        opacity={0.6}
+        opacity={0.7}
         depthWrite={false}
       />
     </points>
@@ -347,8 +347,8 @@ export default function CanvasContainer({ introActive }: CanvasContainerProps) {
         style={{ pointerEvents: 'auto' }}
       >
         <ambientLight intensity={0.6} />
-        <pointLight position={[10, 10, 10]} intensity={1.5} color="#818cf8" castShadow />
-        <pointLight position={[-10, -10, -10]} intensity={0.5} color="#06b6d4" />
+        <pointLight position={[10, 10, 10]} intensity={1.8} color="#c770f0" castShadow />
+        <pointLight position={[-10, -10, -10]} intensity={0.8} color="#9333ea" />
         <directionalLight position={[0, 5, 5]} intensity={1.0} color="#ffffff" castShadow />
 
         {/* 3D Content elements */}

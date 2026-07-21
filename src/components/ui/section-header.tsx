@@ -21,22 +21,22 @@ export default function SectionHeader({
   return (
     <div
       className={cn(
-        'max-w-2xl space-y-4 mb-12 md:mb-16',
+        'max-w-3xl space-y-3 mb-12 md:mb-16',
         align === 'center' && 'mx-auto text-center',
         className
       )}
     >
-      <div className={cn('inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] border border-[color-mix(in_srgb,var(--accent)_28%,transparent)]', align === 'center' && 'justify-center')}>
-        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-        <span className="eyebrow">{eyebrow}</span>
+      <div className={cn('inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-mono font-bold uppercase tracking-widest', align === 'center' && 'justify-center')}>
+        <span className="w-1.5 h-1.5 rounded-full bg-[#c770f0] animate-pulse" />
+        <span>{eyebrow}</span>
       </div>
 
-      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[var(--foreground)] leading-[1.15]">
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[var(--foreground)] leading-[1.18]">
         {title}
       </h2>
 
       {description ? (
-        <p className="text-muted text-base md:text-lg leading-relaxed font-normal">
+        <p className="text-muted text-base md:text-lg leading-relaxed font-normal pt-1">
           {description}
         </p>
       ) : null}
