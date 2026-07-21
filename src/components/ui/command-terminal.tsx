@@ -13,8 +13,6 @@ interface CommandTerminalProps {
 interface LogEntry {
   type: 'input' | 'output' | 'error';
   text: string;
-  isComponent?: boolean;
-  component?: React.ReactNode;
 }
 
 export default function CommandTerminal({ isOpen, onClose }: CommandTerminalProps) {
@@ -26,7 +24,6 @@ export default function CommandTerminal({ isOpen, onClose }: CommandTerminalProp
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalEndRef = useRef<HTMLDivElement>(null);
 
-  // Focus terminal input
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => {
@@ -35,21 +32,15 @@ export default function CommandTerminal({ isOpen, onClose }: CommandTerminalProp
     }
   }, [isOpen]);
 
-  // Scroll to bottom
   useEffect(() => {
     terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [logs]);
 
-  // Global key listener to toggle terminal
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Toggle with Ctrl + / or `~`
       if ((e.ctrlKey && e.key === '/') || e.key === '`') {
         e.preventDefault();
         if (isOpen) onClose();
-        else {
-          // Handled externally but we can do a local toggle trigger if we bind correctly
-        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -130,7 +121,7 @@ Type "projects [id]" to view complete architecture case study.`
         });
         break;
       case 'resume':
-        newLogs.push({ type: 'output', text: 'Retrieving resume file link... Open standard document tab.' });
+        newLogs.push({ type: 'output', text: 'Retrieving resume file link... Opening document.' });
         if (typeof window !== 'undefined') {
           window.open(portfolioConfig.owner.resumeUrl, '_blank');
         }
@@ -160,13 +151,14 @@ ${portfolioConfig.githubStats.primaryLanguages.map(l => `    * ${l.name.padEnd(1
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-45 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md pointer-events-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          onClick={onClose}
         >
           <motion.div
-            className="w-full max-w-3xl h-[480px] rounded-2xl glass-panel overflow-hidden border border-slate-700 flex flex-col shadow-2xl relative"
+            className="w-full max-w-3xl h-[500px] rounded-3xl card border-[var(--border-strong)] overflow-hidden flex flex-col shadow-2xl relative"
             initial={{ scale: 0.9, y: 20 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.9, y: 20 }}
@@ -174,16 +166,17 @@ ${portfolioConfig.githubStats.primaryLanguages.map(l => `    * ${l.name.padEnd(1
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header bar */}
-            <div className="px-4 py-3 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between text-slate-400 select-none">
-              <div className="flex items-center space-x-2 text-indigo-400">
+            <div className="px-5 py-3.5 bg-[color-mix(in_srgb,var(--foreground)_5%,transparent)] border-b border-[var(--border)] flex items-center justify-between text-muted select-none">
+              <div className="flex items-center gap-2.5 text-indigo-400">
                 <TerminalIcon className="w-4 h-4" />
                 <span className="font-mono text-xs font-bold tracking-wider">WORKSPACE_TERMINAL_SHELL</span>
               </div>
-              <div className="flex items-center space-x-3">
-                <span className="text-[10px] text-slate-500 font-mono">Press '`' or Esc to close</span>
+              <div className="flex items-center gap-4">
+                <span className="text-[11px] text-muted-dark font-mono hidden sm:inline">Press Esc or '`' to close</span>
                 <button
+                  type="button"
                   onClick={onClose}
-                  className="p-1 hover:bg-slate-800 rounded-md transition-colors text-slate-400 hover:text-white"
+                  className="p-1 hover:bg-[color-mix(in_srgb,var(--foreground)_10%,transparent)] rounded-lg transition-colors text-muted hover:text-[var(--foreground)]"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -192,7 +185,7 @@ ${portfolioConfig.githubStats.primaryLanguages.map(l => `    * ${l.name.padEnd(1
 
             {/* Terminal screen */}
             <div
-              className="flex-1 p-6 overflow-y-auto font-mono text-xs space-y-3 text-slate-300 leading-relaxed cursor-text"
+              className="flex-1 p-6 overflow-y-auto font-mono text-xs space-y-3 text-[var(--foreground)] leading-relaxed cursor-text bg-black/40"
               onClick={() => inputRef.current?.focus()}
             >
               {logs.map((log, index) => (
@@ -200,7 +193,7 @@ ${portfolioConfig.githubStats.primaryLanguages.map(l => `    * ${l.name.padEnd(1
                   key={index}
                   className={
                     log.type === 'error'
-                      ? 'text-red-400 font-bold'
+                      ? 'text-rose-400 font-bold'
                       : log.type === 'input'
                       ? 'text-indigo-400 font-bold'
                       : 'text-slate-300 whitespace-pre-wrap'
@@ -213,7 +206,7 @@ ${portfolioConfig.githubStats.primaryLanguages.map(l => `    * ${l.name.padEnd(1
             </div>
 
             {/* Input Line */}
-            <div className="p-4 bg-slate-950/60 border-t border-slate-800 flex items-center space-x-2">
+            <div className="p-4 bg-[color-mix(in_srgb,var(--foreground)_3%,transparent)] border-t border-[var(--border)] flex items-center gap-2">
               <span className="font-mono text-xs font-bold text-indigo-400 select-none">
                 nguyenhanhphuc@workspace ~
               </span>
@@ -229,7 +222,7 @@ ${portfolioConfig.githubStats.primaryLanguages.map(l => `    * ${l.name.padEnd(1
                     onClose();
                   }
                 }}
-                className="flex-1 bg-transparent outline-none font-mono text-xs text-white"
+                className="flex-1 bg-transparent outline-none font-mono text-xs text-[var(--foreground)]"
                 placeholder="Type 'help' to review catalog operations..."
               />
             </div>

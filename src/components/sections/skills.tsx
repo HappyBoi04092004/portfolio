@@ -2,10 +2,11 @@
 
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { Server, Smartphone, Database, Cloud, Check } from 'lucide-react';
+import { Server, Smartphone, Database, Cloud, CheckCircle } from 'lucide-react';
+import SectionHeader from '@/components/ui/section-header';
 import { portfolioConfig } from '@/config/portfolio';
+import { cn } from '@/lib/utils';
 
-// Map icon name strings to React Components
 const iconMap: Record<string, React.ReactNode> = {
   Server: <Server className="w-4 h-4" />,
   Smartphone: <Smartphone className="w-4 h-4" />,
@@ -15,124 +16,94 @@ const iconMap: Record<string, React.ReactNode> = {
 
 export default function Skills() {
   const [activeCategory, setActiveCategory] = useState(0);
-  const containerRef = useRef(null);
-  const isInView = useInView(containerRef, { once: true, margin: '-100px' });
-
-  const currentCategory = portfolioConfig.skills[activeCategory];
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const current = portfolioConfig.skills[activeCategory];
 
   return (
-    <section 
-      id="skills" 
-      ref={containerRef}
-      className="min-h-screen w-full relative flex items-center justify-center py-24 section-shell pointer-events-none"
-    >
-      <div className="max-w-5xl w-full space-y-12 relative z-10 pointer-events-auto">
-        
-        {/* Title */}
-        <div className="space-y-4 text-center lg:text-left">
-          <span className="text-xs font-mono text-indigo-400 uppercase tracking-widest">[ Competency ]</span>
-          <h2 className="text-3xl sm:text-5xl font-bold uppercase tracking-tight text-white text-gradient">
-            SKILLS DASHBOARD
-          </h2>
+    <section id="skills" ref={ref} className="section-block section-shell pointer-events-none">
+      <div className="pointer-events-auto">
+        <SectionHeader
+          eyebrow="Kỹ năng"
+          title="Năng lực Kỹ thuật Cốt lõi"
+          description="Chuyên sâu backend, mobile cross-platform và hạ tầng cloud — từ thiết kế kiến trúc microservices đến tự động hóa CI/CD."
+        />
+
+        {/* Tab Buttons */}
+        <div className="flex flex-wrap gap-3 mb-10">
+          {portfolioConfig.skills.map((category, index) => (
+            <button
+              key={category.title}
+              type="button"
+              onClick={() => setActiveCategory(index)}
+              className={cn(
+                'inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold border transition-all duration-300 cursor-pointer shadow-sm',
+                index === activeCategory
+                  ? 'bg-indigo-600 text-white border-indigo-400/50 shadow-lg shadow-indigo-500/25 scale-[1.02]'
+                  : 'bg-[color-mix(in_srgb,var(--foreground)_3%,transparent)] border-[var(--border)] text-muted hover:text-[var(--foreground)] hover:border-[var(--border-strong)] hover:bg-[color-mix(in_srgb,var(--foreground)_6%,transparent)]'
+              )}
+            >
+              {iconMap[category.icon]}
+              <span>{category.title}</span>
+            </button>
+          ))}
         </div>
 
-        {/* Dashboard Console */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          
-          {/* Left panel: category selection menu (4 spans) */}
-          <motion.div 
-            className="lg:col-span-4 flex flex-col gap-3"
-            initial={{ opacity: 0, x: -20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5 }}
-          >
-            {portfolioConfig.skills.map((category, index) => {
-              const isActive = index === activeCategory;
-              return (
-                <button
-                  key={index}
-                  onClick={() => setActiveCategory(index)}
-                  className={`w-full p-4 rounded-xl text-left font-mono text-sm border flex items-center justify-between transition-all duration-300 ${
-                    isActive
-                      ? 'bg-indigo-500/10 border-indigo-500 text-indigo-300 shadow-md shadow-indigo-500/5'
-                      : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className={`p-2 rounded-lg ${isActive ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-500'}`}>
-                      {iconMap[category.icon]}
+        {/* Active Category Display */}
+        <motion.div
+          className="card p-8 sm:p-10 relative overflow-hidden"
+          initial={{ opacity: 0, y: 16 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.4 }}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeCategory}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-8"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--border)] pb-6">
+                <div>
+                  <h3 className="text-2xl font-bold">{current.title}</h3>
+                  <p className="text-sm text-muted mt-1">
+                    Bao gồm {current.skills.length} lĩnh vực thành thạo chuyên sâu
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 text-xs font-mono text-indigo-400 bg-indigo-500/10 px-3 py-1.5 rounded-full border border-indigo-500/20 w-fit">
+                  <CheckCircle className="w-3.5 h-3.5" />
+                  <span>VERIFIED PROFICIENCY</span>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                {current.skills.map((skill, idx) => (
+                  <div key={skill.name} className="space-y-3 p-4 rounded-2xl bg-[color-mix(in_srgb,var(--foreground)_2%,transparent)] border border-[var(--border)] hover:border-[var(--border-strong)] transition-all">
+                    <div className="flex justify-between items-center text-sm font-semibold">
+                      <span className="text-[var(--foreground)] text-base">{skill.name}</span>
+                      <span className="text-indigo-400 font-mono font-bold">{skill.level}%</span>
                     </div>
-                    <span className="font-bold">{category.title}</span>
+
+                    <div className="h-2.5 rounded-full bg-[color-mix(in_srgb,var(--foreground)_8%,transparent)] overflow-hidden">
+                      <motion.div
+                        className="h-full rounded-full bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-400"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${skill.level}%` }}
+                        transition={{ duration: 0.8, delay: idx * 0.08, ease: 'easeOut' }}
+                      />
+                    </div>
+
+                    <p className="text-xs text-muted leading-relaxed font-normal">
+                      {skill.info}
+                    </p>
                   </div>
-                  {isActive && <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />}
-                </button>
-              );
-            })}
-          </motion.div>
-
-          {/* Right panel: core statistics and skill meters (8 spans) */}
-          <motion.div 
-            className="lg:col-span-8 rounded-2xl glass-panel border border-slate-700/50 p-6 sm:p-8 flex flex-col justify-between"
-            initial={{ opacity: 0, x: 20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeCategory}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-6 flex-1"
-              >
-                <div className="border-b border-slate-800 pb-4">
-                  <h3 className="text-xl font-bold text-white uppercase font-mono tracking-wide flex items-center space-x-2">
-                    <span className="text-indigo-400">{currentCategory.title}</span>
-                    <span className="text-xs text-slate-500 font-normal">({currentCategory.skills.length} parameters)</span>
-                  </h3>
-                </div>
-
-                <div className="space-y-6">
-                  {currentCategory.skills.map((skill, idx) => (
-                    <div key={idx} className="space-y-2">
-                      <div className="flex justify-between text-xs sm:text-sm">
-                        <span className="font-bold text-slate-200 font-mono">{skill.name}</span>
-                        <span className="text-indigo-400 font-mono font-bold">{skill.level}%</span>
-                      </div>
-                      
-                      {/* Meter bar */}
-                      <div className="h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800/40 relative">
-                        <motion.div
-                          className="h-full bg-gradient-to-r from-indigo-500 to-indigo-400"
-                          initial={{ width: 0 }}
-                          animate={{ width: `${skill.level}%` }}
-                          transition={{ duration: 0.8, delay: idx * 0.1 }}
-                        />
-                      </div>
-                      
-                      {/* Capability info details */}
-                      <p className="text-[11px] text-slate-500 font-mono italic pl-1 leading-normal">
-                        ⚡ {skill.info}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Dashboard Footer info */}
-            <div className="mt-8 border-t border-slate-800 pt-4 flex justify-between items-center text-[10px] text-slate-500 font-mono">
-              <span>SECURITY_CLEARANCE: DEV_ADMIN</span>
-              <span className="flex items-center space-x-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>REALTIME METRIC SYNCED</span>
-              </span>
-            </div>
-
-          </motion.div>
-        </div>
-
+                ))}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );

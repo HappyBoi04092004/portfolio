@@ -2,32 +2,37 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Target, Eye, Award } from 'lucide-react';
+import { Target, Eye, Code2, Sparkles } from 'lucide-react';
+import SectionHeader from '@/components/ui/section-header';
 import { portfolioConfig } from '@/config/portfolio';
 
-// Count-up helper component
-function Counter({ value, duration = 1.5, suffix = '' }: { value: number; duration?: number; suffix?: string }) {
+function Counter({
+  value,
+  duration = 1.6,
+  suffix = '',
+}: {
+  value: number;
+  duration?: number;
+  suffix?: string;
+}) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
+  const isInView = useInView(ref, { once: true, margin: '-40px' });
 
   useEffect(() => {
     if (!isInView) return;
-
-    let startTimestamp: number | null = null;
-    const step = (timestamp: number) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / (duration * 1000), 1);
+    let start: number | null = null;
+    const step = (ts: number) => {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / (duration * 1000), 1);
       setCount(Math.floor(progress * value));
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      }
+      if (progress < 1) requestAnimationFrame(step);
     };
-    window.requestAnimationFrame(step);
+    requestAnimationFrame(step);
   }, [isInView, value, duration]);
 
   return (
-    <span ref={ref} className="text-3xl sm:text-4xl font-mono font-bold text-white tracking-tight">
+    <span ref={ref} className="text-3xl md:text-4xl font-extrabold text-gradient tabular-nums">
       {count}
       {suffix}
     </span>
@@ -35,103 +40,111 @@ function Counter({ value, duration = 1.5, suffix = '' }: { value: number; durati
 }
 
 export default function About() {
-  const containerRef = useRef(null);
-  const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section 
-      id="about" 
-      ref={containerRef}
-      className="min-h-screen w-full relative flex items-center justify-center py-24 section-shell overflow-hidden pointer-events-none"
-    >
-      <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10 pointer-events-auto">
-        
-        {/* Left story column (7 spans) */}
-        <motion.div 
-          className="lg:col-span-7 space-y-8"
-          initial={{ opacity: 0, x: -30 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="space-y-4">
-            <span className="text-xs font-mono text-indigo-400 uppercase tracking-widest">[ Overview ]</span>
-            <h2 className="text-3xl sm:text-5xl font-bold uppercase tracking-tight text-white text-gradient">
-              THE JOURNEY & MISSION
-            </h2>
-          </div>
+    <section id="about" ref={ref} className="section-block section-shell pointer-events-none">
+      <div className="pointer-events-auto">
+        <SectionHeader
+          eyebrow="Giới thiệu"
+          title="Hành trình & Định hướng phát triển"
+          description="Kết hợp backend mở rộng tốt với trải nghiệm mobile mượt — ưu tiên kiến trúc sạch, tự động hóa và vận hành hệ thống ổn định."
+        />
 
-          <div className="p-6 sm:p-8 rounded-2xl glass-panel space-y-6">
-            {/* Owner placeholder portrait frame - rendered stylishly as a futuristic terminal block */}
-            <div className="flex items-center space-x-4 border-b border-slate-800 pb-6">
-              <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-500 to-cyan-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/20">
-                <span>H</span>
-                <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-[#050816]" />
+        {/* Top Asymmetric Grid */}
+        <div className="grid lg:grid-cols-12 gap-8 items-stretch">
+          
+          {/* Developer Story Card */}
+          <motion.div
+            className="lg:col-span-7 card p-8 sm:p-10 flex flex-col justify-between space-y-6 relative overflow-hidden"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="space-y-6">
+              <div className="flex items-center gap-4 border-b border-[var(--border)] pb-6">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-violet-600 flex items-center justify-center text-xl font-bold text-white shadow-xl shadow-indigo-500/20">
+                    HP
+                  </div>
+                  <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-[var(--background)] flex items-center justify-center text-[10px] text-white">
+                    ✓
+                  </span>
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg sm:text-xl">{portfolioConfig.owner.name}</h3>
+                  <p className="text-sm font-semibold text-indigo-400">Senior Backend & Flutter Developer</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-white font-bold text-lg">{portfolioConfig.owner.name}</h3>
-                <p className="text-xs text-indigo-400 font-mono">Software Engineer & Architect</p>
+
+              <div className="space-y-4 text-muted text-base leading-relaxed">
+                <p>{portfolioConfig.about.story}</p>
               </div>
             </div>
 
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed whitespace-pre-line">
-              {portfolioConfig.about.story}
-            </p>
-          </div>
+            <div className="pt-4 flex items-center justify-between text-xs font-mono text-muted-dark border-t border-[var(--border)]">
+              <span>LOCATION: HO CHI MINH CITY, VIETNAM</span>
+              <span className="flex items-center gap-1.5 text-emerald-400">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                ACTIVE ENGINE
+              </span>
+            </div>
+          </motion.div>
 
-          {/* Stats grid */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* Stats Grid */}
+          <motion.div
+            className="lg:col-span-5 grid grid-cols-2 gap-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
             {portfolioConfig.about.stats.map((stat, idx) => (
-              <div key={idx} className="p-4 sm:p-6 rounded-2xl glass-card flex flex-col justify-between h-28">
-                <span className="text-xs text-slate-500 font-mono uppercase tracking-wider">{stat.label}</span>
+              <div
+                key={idx}
+                className="card card-interactive p-6 flex flex-col justify-between gap-3 text-left group"
+              >
+                <span className="text-xs font-semibold text-muted uppercase tracking-wider group-hover:text-indigo-400 transition-colors">
+                  {stat.label}
+                </span>
                 <Counter value={stat.value} suffix={stat.suffix} />
               </div>
             ))}
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
-        {/* Right mission/vision column (5 spans) */}
-        <motion.div 
-          className="lg:col-span-5 flex flex-col gap-6 justify-center"
-          initial={{ opacity: 0, x: 30 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          {/* Mission Card */}
-          <div className="p-6 sm:p-8 rounded-2xl glass-card border border-indigo-500/10 space-y-4 hover:border-indigo-500/25 transition-all">
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400">
-              <Target className="w-5 h-5" />
+        {/* Mission & Vision Cards */}
+        <div className="grid md:grid-cols-2 gap-6 mt-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="card card-interactive p-8 space-y-4"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 shadow-md">
+              <Target className="w-6 h-6" />
             </div>
-            <h3 className="text-white font-bold text-lg font-mono uppercase tracking-wide">MISSION STATE</h3>
-            <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+            <h3 className="font-bold text-xl">Sứ mệnh kỹ thuật</h3>
+            <p className="text-sm md:text-base text-muted leading-relaxed">
               {portfolioConfig.about.mission}
             </p>
-          </div>
+          </motion.div>
 
-          {/* Vision Card */}
-          <div className="p-6 sm:p-8 rounded-2xl glass-card border border-cyan-500/10 space-y-4 hover:border-cyan-500/25 transition-all">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400">
-              <Eye className="w-5 h-5" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.28 }}
+            className="card card-interactive p-8 space-y-4"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 shadow-md">
+              <Eye className="w-6 h-6" />
             </div>
-            <h3 className="text-white font-bold text-lg font-mono uppercase tracking-wide">VISION TARGET</h3>
-            <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+            <h3 className="font-bold text-xl">Tầm nhìn dài hạn</h3>
+            <p className="text-sm md:text-base text-muted leading-relaxed">
               {portfolioConfig.about.vision}
             </p>
-          </div>
-
-          {/* Core Philosophy Card */}
-          <div className="p-6 sm:p-8 rounded-2xl glass-card border border-slate-700/40 space-y-4 hover:border-indigo-400/20 transition-all">
-            <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-slate-400">
-              <Award className="w-5 h-5" />
-            </div>
-            <h3 className="text-white font-bold text-lg font-mono uppercase tracking-wide">ENGINEERING LAWS</h3>
-            <ul className="text-slate-400 text-xs space-y-2 list-disc list-inside">
-              <li>Strict Type Checking & Safety first</li>
-              <li>Microservices scale vertically & horizontally</li>
-              <li>Clean Architecture reduces logic complexity</li>
-              <li>Keep components dry, modular, and optimized</li>
-            </ul>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
       </div>
     </section>

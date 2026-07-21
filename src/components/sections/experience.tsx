@@ -2,113 +2,115 @@
 
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Calendar, Briefcase, Award, GraduationCap } from 'lucide-react';
+import { Calendar, GraduationCap, Building2, MapPin, Award } from 'lucide-react';
+import SectionHeader from '@/components/ui/section-header';
 import { portfolioConfig } from '@/config/portfolio';
 
 export default function Experience() {
-  const containerRef = useRef(null);
-  const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section 
-      id="experience" 
-      ref={containerRef}
-      className="min-h-screen w-full relative flex items-center justify-center py-24 section-shell pointer-events-none"
-    >
-      <div className="max-w-4xl w-full space-y-16 relative z-10 pointer-events-auto">
-        
-        {/* Title */}
-        <div className="space-y-4 text-center lg:text-left">
-          <span className="text-xs font-mono text-indigo-400 uppercase tracking-widest">[ Journey ]</span>
-          <h2 className="text-3xl sm:text-5xl font-bold uppercase tracking-tight text-white text-gradient">
-            CAREER TIMELINE
-          </h2>
-        </div>
+    <section id="experience" ref={ref} className="section-block section-shell pointer-events-none">
+      <div className="pointer-events-auto">
+        <SectionHeader
+          eyebrow="Kinh nghiệm"
+          title="Lộ trình & Quá trình Công tác"
+          description="Kinh nghiệm thực chiến qua các dự án doanh nghiệp — cam kết chuẩn mực lập trình, tối ưu hiệu năng và phối hợp nhóm Agile."
+        />
 
-        {/* Timeline body */}
-        <div className="relative border-l border-slate-800 ml-4 md:ml-6 space-y-12">
-          {portfolioConfig.experience.map((item, idx) => {
-            return (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: idx * 0.2 }}
-                className="relative pl-8 sm:pl-12"
-              >
-                {/* Glowing Anchor dot */}
-                <span className="absolute -left-[9px] top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-slate-950 border border-indigo-500">
-                  <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-ping" />
-                </span>
+        {/* Timeline Stream */}
+        <div className="relative pl-6 md:pl-10 border-l-2 border-[color-mix(in_srgb,var(--accent)_30%,var(--border))] space-y-12">
+          {portfolioConfig.experience.map((item, idx) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.5, delay: idx * 0.12 }}
+              className="relative group"
+            >
+              {/* Glowing Node Marker */}
+              <span className="absolute -left-[calc(1.5rem+7px)] md:-left-[calc(2.5rem+7px)] top-1.5 w-4 h-4 rounded-full bg-indigo-500 ring-4 ring-indigo-500/25 group-hover:scale-125 transition-transform shadow-lg shadow-indigo-500/50" />
 
-                {/* Main Card Content */}
-                <div className="p-6 rounded-2xl glass-card border border-slate-800/80 hover:border-indigo-500/30 transition-all space-y-4 text-left">
-                  
-                  {/* Card Header details */}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-800 pb-3">
-                    <div>
-                      <h3 className="text-lg font-bold text-white uppercase tracking-wide flex items-center">
-                        <Briefcase className="w-4 h-4 mr-2 text-indigo-400" />
-                        {item.role}
-                      </h3>
-                      <p className="text-xs font-mono text-indigo-400">
-                        {item.company} // <span className="text-slate-500">{item.location}</span>
-                      </p>
-                    </div>
-
-                    <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-700 text-slate-400 font-mono text-xs w-fit">
-                      <Calendar className="w-3.5 h-3.5" />
-                      <span>{item.period}</span>
-                    </div>
-                  </div>
-
-                  {/* Bullet achievements list */}
-                  <ul className="space-y-2.5 text-slate-300 text-xs sm:text-sm leading-relaxed list-disc list-inside">
-                    {item.description.map((bullet, i) => (
-                      <li key={i} className="pl-1">
-                        {bullet}
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* Skills tags */}
-                  <div className="pt-2 flex flex-wrap gap-1.5">
-                    {item.skills.map((skill, i) => (
-                      <span key={i} className="text-[9px] font-mono text-slate-400 bg-slate-900/50 border border-slate-800 px-2 py-0.5 rounded-md">
-                        {skill}
+              <div className="card card-interactive p-8 space-y-6">
+                
+                {/* Role Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[var(--border)] pb-6">
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-bold group-hover:text-indigo-400 transition-colors">
+                      {item.role}
+                    </h3>
+                    <div className="flex flex-wrap items-center gap-3 text-sm text-indigo-400 font-semibold mt-1">
+                      <span className="flex items-center gap-1.5">
+                        <Building2 className="w-4 h-4 text-muted" />
+                        {item.company}
                       </span>
-                    ))}
+                      <span>·</span>
+                      <span className="flex items-center gap-1.5 text-muted font-normal">
+                        <MapPin className="w-3.5 h-3.5" />
+                        {item.location}
+                      </span>
+                    </div>
                   </div>
 
+                  <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 shrink-0 w-fit">
+                    <Calendar className="w-3.5 h-3.5" />
+                    {item.period}
+                  </span>
                 </div>
-              </motion.div>
-            );
-          })}
+
+                {/* Achievements Bullet List */}
+                <ul className="space-y-3 text-sm sm:text-base text-muted leading-relaxed">
+                  {item.description.map((line) => (
+                    <li key={line.slice(0, 40)} className="flex items-start gap-3">
+                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-2 shrink-0" />
+                      <span>{line}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Tech Skills Pills */}
+                <div className="pt-2 flex flex-wrap gap-2">
+                  {item.skills.map((skill) => (
+                    <span key={skill} className="tag text-xs font-mono font-medium">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
         {/* Education Highlight Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="p-6 rounded-2xl glass-panel border border-slate-800 flex flex-col sm:flex-row gap-4 items-start text-left"
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="card card-interactive p-8 mt-12 flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between"
         >
-          <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-xl">
-            <GraduationCap className="w-6 h-6" />
+          <div className="flex gap-5 items-start">
+            <div className="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 shrink-0 shadow-lg">
+              <GraduationCap className="w-8 h-8" />
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold text-xl">Học vấn & Trình độ</h3>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  GPA 3.76 / 4.0
+                </span>
+              </div>
+              <p className="text-sm text-muted leading-relaxed">
+                Cử nhân Khoa học Máy tính — Chuyên sâu Hệ thống Phân tán, Cloud Computing và Kiến trúc Phần mềm.
+              </p>
+            </div>
           </div>
-          <div className="space-y-1.5">
-            <h3 className="text-white font-bold uppercase tracking-wide text-sm font-mono flex items-center">
-              ACADEMIC CERTIFICATION
-            </h3>
-            <p className="text-slate-300 text-xs sm:text-sm">
-              Bachelor of Science in Computer Science & Software Engineering // Major GPA: 3.76
-            </p>
-            <p className="text-[10px] text-slate-500 font-mono">
-              COMPLETED WITH HONORS // ADVANCED TOPICS IN AUTOMATED CLOUD SYSTEMS
-            </p>
+
+          <div className="flex items-center gap-2 text-xs font-mono font-bold text-indigo-400 bg-indigo-500/10 px-4 py-2 rounded-xl border border-indigo-500/20 shrink-0">
+            <Award className="w-4 h-4" />
+            <span>HONORS GRADUATE</span>
           </div>
         </motion.div>
-
       </div>
     </section>
   );

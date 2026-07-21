@@ -2,99 +2,84 @@
 
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { GitCommit, GitFork, Star, Flame, Trophy } from 'lucide-react';
+import { GitCommit, GitFork, Flame, Trophy } from 'lucide-react';
+import { Github as GithubIcon } from '@/components/ui/brand-icons';
+import SectionHeader from '@/components/ui/section-header';
 import { portfolioConfig } from '@/config/portfolio';
 
-// Color categorizer for cells based on commit count
 const getCellBg = (count: number) => {
-  if (count === 0) return 'bg-[#161b22]'; // dark space empty
-  if (count <= 2) return 'bg-[#0e4429]'; // low commits
-  if (count <= 4) return 'bg-[#006d32] font-semibold'; // medium commits
-  if (count <= 6) return 'bg-[#26a641]'; // high commits
-  return 'bg-[#39d353]'; // maximum commits peak
+  if (count === 0) return 'bg-[color-mix(in_srgb,var(--foreground)_6%,transparent)]';
+  if (count <= 2) return 'bg-emerald-900/90 border border-emerald-800/50';
+  if (count <= 4) return 'bg-emerald-700 border border-emerald-600/50';
+  if (count <= 6) return 'bg-emerald-500 shadow-sm shadow-emerald-500/50';
+  return 'bg-emerald-400 shadow-md shadow-emerald-400/80 animate-pulse';
 };
 
 export default function GithubAnalytics() {
-  const containerRef = useRef(null);
-  const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
   const stats = portfolioConfig.githubStats;
 
+  const statCards = [
+    { icon: GitCommit, label: 'Commits năm nay', value: stats.totalCommits.toString() },
+    { icon: Flame, label: 'Streak liên tục', value: `${stats.streak} ngày` },
+    { icon: GitFork, label: 'Kho mã nguồn', value: `${stats.repositoriesCount} repos` },
+    { icon: Trophy, label: 'Tỷ lệ hoạt động', value: '99.8% Ổn định' },
+  ];
+
   return (
-    <section 
-      id="github" 
-      ref={containerRef}
-      className="min-h-screen w-full relative flex items-center justify-center py-24 section-shell pointer-events-none"
-    >
-      <div className="max-w-5xl w-full space-y-12 relative z-10 pointer-events-auto">
-        
-        {/* Title */}
-        <div className="space-y-4 text-center lg:text-left">
-          <span className="text-xs font-mono text-indigo-400 uppercase tracking-widest">[ Metrics ]</span>
-          <h2 className="text-3xl sm:text-5xl font-bold uppercase tracking-tight text-white text-gradient">
-            GITHUB SYNC & ANALYTICS
-          </h2>
-        </div>
+    <section id="github" ref={ref} className="section-block section-shell pointer-events-none">
+      <div className="pointer-events-auto">
+        <SectionHeader
+          eyebrow="GitHub Activity"
+          title="Hoạt động Đóng góp Mã nguồn"
+          description="Cam kết viết code thường xuyên, duy trì các repository mã nguồn mở và liên tục cập nhật công nghệ mới."
+        />
 
-        {/* Dashboard Box */}
-        <div className="p-6 sm:p-8 rounded-2xl glass-panel border border-slate-700/50 space-y-8">
+        <div className="card p-8 sm:p-10 space-y-10 relative overflow-hidden">
           
-          {/* Top general stats row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 flex items-center space-x-4">
-              <div className="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl">
-                <GitCommit className="w-5 h-5" />
+          {/* Top Stat Cards */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {statCards.map(({ icon: Icon, label, value }) => (
+              <div
+                key={label}
+                className="rounded-2xl border border-[var(--border)] p-5 flex items-center gap-4 bg-[color-mix(in_srgb,var(--foreground)_3%,transparent)] hover:border-[var(--border-strong)] transition-all"
+              >
+                <div className="p-3 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 shrink-0">
+                  <Icon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-muted uppercase tracking-wider">{label}</p>
+                  <p className="text-lg sm:text-xl font-bold font-mono tabular-nums text-[var(--foreground)] mt-0.5">
+                    {value}
+                  </p>
+                </div>
               </div>
-              <div className="text-left">
-                <p className="text-xs text-slate-500 font-mono uppercase">Commits This Year</p>
-                <p className="text-xl font-bold text-white font-mono">{stats.totalCommits}</p>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 flex items-center space-x-4">
-              <div className="p-3 bg-cyan-500/10 text-cyan-400 rounded-xl">
-                <Flame className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <p className="text-xs text-slate-500 font-mono uppercase">Current Streak</p>
-                <p className="text-xl font-bold text-white font-mono">{stats.streak} Days</p>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 flex items-center space-x-4">
-              <div className="p-3 bg-amber-500/10 text-amber-400 rounded-xl">
-                <GitFork className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <p className="text-xs text-slate-500 font-mono uppercase">Repositories</p>
-                <p className="text-xl font-bold text-white font-mono">{stats.repositoriesCount}</p>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 flex items-center space-x-4">
-              <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl">
-                <Trophy className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <p className="text-xs text-slate-500 font-mono uppercase">Sync State</p>
-                <p className="text-sm font-bold text-emerald-400 font-mono flex items-center">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />
-                  STABLE
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
 
-          {/* Languages distribution & Contribution Calendar Wrapper */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Lower Grid: Heatmap + Language breakdown */}
+          <div className="grid lg:grid-cols-12 gap-8 items-start">
             
-            {/* Left: Contribution Calendar (8 spans) */}
-            <div className="lg:col-span-8 space-y-4 text-left">
-              <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider">
-                Contribution Calendar
-              </h3>
-              
-              <div className="p-4 rounded-xl bg-slate-950/40 border border-slate-900 overflow-x-auto">
-                {/* 53 columns representing weeks */}
+            {/* Heatmap Matrix */}
+            <div className="lg:col-span-8 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-bold flex items-center gap-2">
+                  <GithubIcon className="w-4 h-4 text-indigo-400" />
+                  <span>Ma trận đóng góp (53 tuần gần nhất)</span>
+                </h3>
+                <div className="flex items-center gap-1.5 text-xs text-muted font-mono">
+                  <span>Less</span>
+                  <span className="w-2.5 h-2.5 rounded-sm bg-[color-mix(in_srgb,var(--foreground)_6%,transparent)]" />
+                  <span className="w-2.5 h-2.5 rounded-sm bg-emerald-900" />
+                  <span className="w-2.5 h-2.5 rounded-sm bg-emerald-700" />
+                  <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500" />
+                  <span className="w-2.5 h-2.5 rounded-sm bg-emerald-400" />
+                  <span>More</span>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-[var(--border)] p-5 overflow-x-auto bg-[color-mix(in_srgb,var(--foreground)_2%,transparent)]">
                 <div className="flex gap-[3px] min-w-[620px] justify-between">
                   {Array.from({ length: 53 }).map((_, weekIdx) => (
                     <div key={weekIdx} className="flex flex-col gap-[3px]">
@@ -105,52 +90,32 @@ export default function GithubAnalytics() {
                           <div
                             key={dayIdx}
                             title={`${commitsCount} commits`}
-                            className={`w-[9px] h-[9px] rounded-[1px] transition-all duration-300 hover:scale-125 ${getCellBg(
-                              commitsCount
-                            )}`}
+                            className={`w-2.5 h-2.5 rounded-sm transition-all hover:scale-125 ${getCellBg(commitsCount)}`}
                           />
                         );
                       })}
                     </div>
                   ))}
                 </div>
-
-                {/* Calendar Legend indicators */}
-                <div className="flex justify-between items-center text-[9px] text-slate-500 font-mono mt-4">
-                  <span>Learn more about Hanh Phuc Nguyen on GitHub</span>
-                  <div className="flex items-center space-x-1">
-                    <span>Less</span>
-                    <div className="w-2 h-2 bg-[#161b22] rounded-[1px]" />
-                    <div className="w-2 h-2 bg-[#0e4429] rounded-[1px]" />
-                    <div className="w-2 h-2 bg-[#006d32] rounded-[1px]" />
-                    <div className="w-2 h-2 bg-[#26a641] rounded-[1px]" />
-                    <div className="w-2 h-2 bg-[#39d353] rounded-[1px]" />
-                    <span>More</span>
-                  </div>
-                </div>
               </div>
             </div>
 
-            {/* Right: Languages distribution (4 spans) */}
-            <div className="lg:col-span-4 space-y-4 text-left">
-              <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider">
-                Language Usage
-              </h3>
-
-              <div className="p-4 rounded-xl bg-slate-950/40 border border-slate-900 space-y-4">
+            {/* Language Breakdown */}
+            <div className="lg:col-span-4 space-y-4">
+              <h3 className="text-base font-bold">Tỷ lệ ngôn ngữ chính</h3>
+              <div className="space-y-5 rounded-2xl border border-[var(--border)] p-5 bg-[color-mix(in_srgb,var(--foreground)_2%,transparent)]">
                 {stats.primaryLanguages.map((lang, i) => (
-                  <div key={i} className="space-y-1.5">
-                    <div className="flex justify-between text-xs font-mono">
-                      <span className="text-slate-300 font-bold">{lang.name}</span>
-                      <span className="text-slate-400">{lang.percentage}%</span>
+                  <div key={lang.name} className="space-y-2">
+                    <div className="flex justify-between text-xs font-semibold">
+                      <span className="text-[var(--foreground)]">{lang.name}</span>
+                      <span className="text-indigo-400 font-mono font-bold">{lang.percentage}%</span>
                     </div>
-                    {/* Visual Bar percentage representation */}
-                    <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
+                    <div className="h-2 rounded-full bg-[color-mix(in_srgb,var(--foreground)_8%,transparent)] overflow-hidden">
                       <motion.div
-                        className={`h-full ${lang.color}`}
+                        className={`h-full rounded-full ${lang.color}`}
                         initial={{ width: 0 }}
                         animate={isInView ? { width: `${lang.percentage}%` } : {}}
-                        transition={{ duration: 0.8, delay: i * 0.1 }}
+                        transition={{ duration: 0.8, delay: i * 0.1, ease: 'easeOut' }}
                       />
                     </div>
                   </div>
@@ -159,9 +124,7 @@ export default function GithubAnalytics() {
             </div>
 
           </div>
-
         </div>
-
       </div>
     </section>
   );

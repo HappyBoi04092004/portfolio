@@ -2,45 +2,43 @@
 
 import React, { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function ThemeSwitcher() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Check local storage or defaults
-    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
-    const initialTheme = savedTheme || 'dark';
-    
-    setTheme(initialTheme);
-    if (initialTheme === 'light') {
-      document.documentElement.classList.add('light');
-    } else {
-      document.documentElement.classList.remove('light');
-    }
+    setMounted(true);
+    const saved = localStorage.getItem('theme') as 'dark' | 'light' | null;
+    const initial = saved || 'dark';
+    setTheme(initial);
+    document.documentElement.classList.toggle('light', initial === 'light');
   }, []);
 
   const toggleTheme = () => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(nextTheme);
-    localStorage.setItem('theme', nextTheme);
-    
-    if (nextTheme === 'light') {
-      document.documentElement.classList.add('light');
-    } else {
-      document.documentElement.classList.remove('light');
-    }
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    localStorage.setItem('theme', next);
+    document.documentElement.classList.toggle('light', next === 'light');
   };
 
   return (
     <button
+      type="button"
       onClick={toggleTheme}
-      aria-label="Toggle theme"
-      className="p-3 rounded-full bg-slate-900/60 border border-slate-800 backdrop-blur-md text-slate-400 hover:text-indigo-400 hover:border-indigo-500/30 transition-all hover:scale-105 active:scale-95 shadow-lg relative z-40"
+      aria-label="Đổi giao diện sáng/tối"
+      className={cn(
+        'p-2.5 rounded-lg border border-[var(--border)] text-muted',
+        'hover:text-[var(--foreground)] hover:border-[var(--border-strong)] transition-colors'
+      )}
     >
-      {theme === 'dark' ? (
-        <Sun className="w-5 h-5 transition-transform duration-500 hover:rotate-45" />
+      {!mounted ? (
+        <span className="block w-5 h-5" />
+      ) : theme === 'dark' ? (
+        <Sun className="w-5 h-5" />
       ) : (
-        <Moon className="w-5 h-5 transition-transform duration-500 hover:-rotate-12" />
+        <Moon className="w-5 h-5" />
       )}
     </button>
   );
