@@ -13,9 +13,9 @@ export default function Experience() {
     <section 
       id="experience" 
       ref={containerRef}
-      className="min-h-screen w-full relative flex items-center justify-center py-24 px-6 sm:px-12 md:px-24"
+      className="min-h-screen w-full relative flex items-center justify-center py-24 section-shell pointer-events-none"
     >
-      <div className="max-w-4xl w-full space-y-16 relative z-10">
+      <div className="max-w-4xl w-full space-y-16 relative z-10 pointer-events-auto">
         
         {/* Title */}
         <div className="space-y-4 text-center lg:text-left">
@@ -42,7 +42,7 @@ export default function Experience() {
                 </span>
 
                 {/* Main Card Content */}
-                <div className="p-6 rounded-2xl glass-card border border-slate-850 hover:border-indigo-500/20 transition-all space-y-4 text-left">
+                <div className="p-6 rounded-2xl glass-card border border-slate-800/80 hover:border-indigo-500/30 transition-all space-y-4 text-left">
                   
                   {/* Card Header details */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-800 pb-3">
@@ -56,7 +56,7 @@ export default function Experience() {
                       </p>
                     </div>
 
-                    <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-850 text-slate-400 font-mono text-xs w-fit">
+                    <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-700 text-slate-400 font-mono text-xs w-fit">
                       <Calendar className="w-3.5 h-3.5" />
                       <span>{item.period}</span>
                     </div>

@@ -32,9 +32,9 @@ export default function Contact() {
     <section 
       id="contact" 
       ref={containerRef}
-      className="min-h-screen w-full relative flex flex-col justify-center py-24 px-6 sm:px-12 md:px-24"
+      className="min-h-screen w-full relative flex flex-col justify-center py-24 section-shell pointer-events-none"
     >
-      <div className="max-w-5xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+      <div className="max-w-5xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10 pointer-events-auto">
         
         {/* Left Column: Social details (5 spans) */}
         <motion.div 
@@ -139,7 +139,7 @@ export default function Contact() {
           animate={isInView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <div className="p-6 sm:p-8 rounded-2xl glass-panel border border-slate-750 relative overflow-hidden">
+          <div className="p-6 sm:p-8 rounded-2xl glass-panel border border-slate-700/50 relative overflow-hidden">
             
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

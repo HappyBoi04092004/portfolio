@@ -62,9 +62,9 @@ export default function Projects() {
     <section 
       id="projects" 
       ref={containerRef}
-      className="min-h-screen w-full relative flex flex-col justify-center py-24 px-6 sm:px-12 md:px-24"
+      className="min-h-screen w-full relative flex flex-col justify-center py-24 section-shell pointer-events-none"
     >
-      <div className="max-w-6xl w-full mx-auto space-y-12 relative z-10">
+      <div className="max-w-6xl w-full mx-auto space-y-12 relative z-10 pointer-events-auto">
         
         {/* Title */}
         <div className="space-y-4 text-center lg:text-left">
@@ -138,7 +138,7 @@ export default function Projects() {
       <AnimatePresence>
         {selectedProject && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md pointer-events-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

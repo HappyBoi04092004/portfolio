@@ -23,9 +23,9 @@ export default function GithubAnalytics() {
     <section 
       id="github" 
       ref={containerRef}
-      className="min-h-screen w-full relative flex items-center justify-center py-24 px-6 sm:px-12 md:px-24"
+      className="min-h-screen w-full relative flex items-center justify-center py-24 section-shell pointer-events-none"
     >
-      <div className="max-w-5xl w-full space-y-12 relative z-10">
+      <div className="max-w-5xl w-full space-y-12 relative z-10 pointer-events-auto">
         
         {/* Title */}
         <div className="space-y-4 text-center lg:text-left">
@@ -40,7 +40,7 @@ export default function GithubAnalytics() {
           
           {/* Top general stats row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-850 flex items-center space-x-4">
+            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 flex items-center space-x-4">
               <div className="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl">
                 <GitCommit className="w-5 h-5" />
               </div>
@@ -50,7 +50,7 @@ export default function GithubAnalytics() {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-850 flex items-center space-x-4">
+            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 flex items-center space-x-4">
               <div className="p-3 bg-cyan-500/10 text-cyan-400 rounded-xl">
                 <Flame className="w-5 h-5" />
               </div>
@@ -60,7 +60,7 @@ export default function GithubAnalytics() {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-850 flex items-center space-x-4">
+            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 flex items-center space-x-4">
               <div className="p-3 bg-amber-500/10 text-amber-400 rounded-xl">
                 <GitFork className="w-5 h-5" />
               </div>
@@ -70,7 +70,7 @@ export default function GithubAnalytics() {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-850 flex items-center space-x-4">
+            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 flex items-center space-x-4">
               <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl">
                 <Trophy className="w-5 h-5" />
               </div>

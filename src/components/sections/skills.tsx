@@ -24,9 +24,9 @@ export default function Skills() {
     <section 
       id="skills" 
       ref={containerRef}
-      className="min-h-screen w-full relative flex items-center justify-center py-24 px-6 sm:px-12 md:px-24"
+      className="min-h-screen w-full relative flex items-center justify-center py-24 section-shell pointer-events-none"
     >
-      <div className="max-w-5xl w-full space-y-12 relative z-10">
+      <div className="max-w-5xl w-full space-y-12 relative z-10 pointer-events-auto">
         
         {/* Title */}
         <div className="space-y-4 text-center lg:text-left">

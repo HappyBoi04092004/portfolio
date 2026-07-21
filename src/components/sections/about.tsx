@@ -42,9 +42,9 @@ export default function About() {
     <section 
       id="about" 
       ref={containerRef}
-      className="min-h-screen w-full relative flex items-center justify-center py-24 px-6 sm:px-12 md:px-24 overflow-hidden"
+      className="min-h-screen w-full relative flex items-center justify-center py-24 section-shell overflow-hidden pointer-events-none"
     >
-      <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+      <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10 pointer-events-auto">
         
         {/* Left story column (7 spans) */}
         <motion.div 

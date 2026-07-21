@@ -7,6 +7,7 @@ export default function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  const [enabled, setEnabled] = useState(false);
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -16,7 +17,14 @@ export default function CustomCursor() {
   const ringY = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    // Add custom-cursor-active class to body
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
+    const narrow = window.matchMedia('(max-width: 1024px)').matches;
+    if (coarse || narrow) {
+      setEnabled(false);
+      return;
+    }
+
+    setEnabled(true);
     document.body.classList.add('custom-cursor-active');
 
     const moveCursor = (e: MouseEvent) => {
@@ -65,7 +73,7 @@ export default function CustomCursor() {
     };
   }, [cursorX, cursorY, isVisible]);
 
-  if (!isVisible) return null;
+  if (!enabled || !isVisible) return null;
 
   return (
     <>

@@ -14,9 +14,9 @@ export default function Certificates() {
     <section 
       id="certificates" 
       ref={containerRef}
-      className="min-h-screen w-full relative flex items-center justify-center py-24 px-6 sm:px-12 md:px-24"
+      className="min-h-screen w-full relative flex items-center justify-center py-24 section-shell pointer-events-none"
     >
-      <div className="max-w-5xl w-full space-y-12 relative z-10">
+      <div className="max-w-5xl w-full space-y-12 relative z-10 pointer-events-auto">
         
         {/* Title */}
         <div className="space-y-4 text-center lg:text-left">
@@ -35,7 +35,7 @@ export default function Certificates() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: idx * 0.15 }}
               onClick={() => setSelectedCert(cert)}
-              className="p-6 rounded-2xl glass-card border border-slate-850 hover:border-indigo-500/20 transition-all flex flex-col justify-between h-64 text-left cursor-pointer group"
+              className="p-6 rounded-2xl glass-card border border-slate-800/80 hover:border-indigo-500/30 transition-all flex flex-col justify-between min-h-64 text-left cursor-pointer group"
             >
               <div className="space-y-4">
                 <div className="flex justify-between items-start">
@@ -73,7 +73,7 @@ export default function Certificates() {
       <AnimatePresence>
         {selectedCert && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md pointer-events-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

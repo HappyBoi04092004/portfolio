@@ -42,11 +42,11 @@ export default function Hero() {
   }, [charIndex, isDeleting, roleIndex, roles]);
 
   return (
-    <section className="min-h-screen w-full relative flex items-center justify-start py-20 px-6 sm:px-12 md:px-24">
+    <section className="min-h-screen w-full relative flex items-center justify-center lg:justify-start pt-28 pb-16 section-shell pointer-events-none">
       {/* Visual cyber grid overlays */}
       <div className="absolute inset-0 cyber-grid opacity-10 pointer-events-none" />
 
-      <div className="max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 w-full">
+      <div className="max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 w-full pointer-events-auto">
         {/* Text Area */}
         <div className="space-y-6 text-left">
           <motion.div
@@ -64,7 +64,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl sm:text-6xl font-bold tracking-tight text-white uppercase text-gradient"
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight uppercase text-gradient leading-[1.1]"
             >
               {portfolioConfig.owner.name}
             </motion.h1>

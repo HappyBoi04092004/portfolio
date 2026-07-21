@@ -338,15 +338,14 @@ export default function CanvasContainer({ introActive }: CanvasContainerProps) {
   }, []);
 
   return (
-    <div className="fixed inset-0 w-full h-full -z-10 pointer-events-none overflow-hidden select-none">
+    <div className="fixed inset-0 w-full h-full z-0 overflow-hidden select-none">
       <Canvas
+        className="touch-none"
         camera={{ position: [0, 0, 25], fov: 45 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         shadows
+        style={{ pointerEvents: 'auto' }}
       >
-        <color attach="background" args={['#050816']} />
-        
-        {/* Lights */}
         <ambientLight intensity={0.6} />
         <pointLight position={[10, 10, 10]} intensity={1.5} color="#818cf8" castShadow />
         <pointLight position={[-10, -10, -10]} intensity={0.5} color="#06b6d4" />
