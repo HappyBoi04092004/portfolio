@@ -42,12 +42,12 @@ export interface SkillCategory {
 
 export const portfolioConfig = {
   owner: {
-    name: "Hanh Phuc Nguyen",
+    name: "Nguyễn Hạnh Phúc",
     roles: ["Backend Developer", "Flutter Developer", "Software Engineer"],
     headline: "Architecting High-Performance Backends & Seamless Mobile Experiences",
     subHeadline: "Crafting scalable server-side systems, cross-platform mobile apps, and robust cloud architectures with clean code and modern design systems.",
     email: "nguyenhanhphuc.dev@gmail.com",
-    github: "https://github.com/nguyenhanhphuc",
+    github: "https://github.com/HappyBoi04092004",
     linkedin: "https://linkedin.com/in/nguyenhanhphuc",
     facebook: "https://facebook.com/nguyenhanhphuc.dev",
     resumeUrl: "#", // Standard placeholder link that can be bound to public/resume.pdf

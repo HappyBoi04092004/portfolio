@@ -1,7 +1,11 @@
-import type { Metadata } from 'next';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
-import LenisProvider from '@/components/ui/lenis-provider';
+import SiteHeader from '@/components/layout/site-header';
+import SiteFooter from '@/components/layout/site-footer';
+import ParticleBackground from '@/components/ui/particle-background';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -14,41 +18,43 @@ const display = Plus_Jakarta_Sans({
   weight: ['500', '600', '700', '800'],
 });
 
-export const metadata: Metadata = {
-  title: 'Hanh Phuc Nguyen | Backend & Flutter Developer',
-  description:
-    'Portfolio của Hanh Phuc Nguyen — Backend, Flutter và kiến trúc cloud. Dự án, kinh nghiệm và liên hệ.',
-  keywords: [
-    'Hanh Phuc Nguyen',
-    'Backend Developer',
-    'Flutter Developer',
-    'Software Engineer',
-    'Vietnam Developer',
-  ],
-  authors: [{ name: 'Hanh Phuc Nguyen' }],
-  openGraph: {
-    title: 'Hanh Phuc Nguyen | Portfolio',
-    description: 'Backend, Flutter và hệ thống cloud — portfolio cá nhân.',
-    type: 'website',
-    url: 'https://hanhphuc.dev',
-    siteName: 'Hanh Phuc Nguyen',
-    locale: 'vi_VN',
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [load, updateLoad] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      updateLoad(false);
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <html lang="vi" className={`${inter.variable} ${display.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col selection:bg-indigo-500/30 selection:text-white">
-        <LenisProvider>{children}</LenisProvider>
+    <html lang="en" className={`${inter.variable} ${display.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col selection:bg-indigo-500/30 selection:text-white bg-[#0c0513]">
+        {/* Preloader */}
+        <div id={load ? 'preloader' : 'preloader-none'} />
+
+        {/* Scroll Control Wrapper */}
+        <div className="flex flex-col min-h-screen" id={load ? 'no-scroll' : 'scroll'}>
+          {/* Particle Background */}
+          <ParticleBackground />
+
+          {/* Header */}
+          <SiteHeader />
+
+          {/* Main Content */}
+          <main className="relative z-10 flex-grow pt-[var(--header-h)]">
+            {children}
+          </main>
+
+          {/* Footer */}
+          <SiteFooter />
+        </div>
       </body>
     </html>
   );
