@@ -49,7 +49,7 @@ export const portfolioConfig = {
     email: "nguyenhanhphuc.dev@gmail.com",
     github: "https://github.com/HappyBoi04092004",
     linkedin: "https://linkedin.com/in/nguyenhanhphuc",
-    facebook: "https://facebook.com/nguyenhanhphuc.dev",
+    facebook: "https://www.facebook.com/hanhphuc.nguyen.148553",
     resumeUrl: "#", // Standard placeholder link that can be bound to public/resume.pdf
   },
   
