@@ -2,30 +2,53 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Home, User, FolderGit2, FileText, BookOpen, Star, Menu, X, GitFork } from 'lucide-react';
-import ThemeSwitcher from '@/components/ui/theme-switcher';
+import { Menu, X } from 'lucide-react';
 import { portfolioConfig } from '@/config/portfolio';
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
 
 const links = [
-  { href: '/', label: 'Home', icon: Home },
-  { href: '/about', label: 'About', icon: User },
-  { href: '/project', label: 'Projects', icon: FolderGit2 },
-  { href: '/resume', label: 'Resume', icon: FileText },
+  { href: '#services', label: 'Dịch vụ' },
+  { href: '#experience', label: 'Kinh nghiệm' },
+  { href: '#stack', label: 'Công nghệ' },
+  { href: '#education', label: 'Học vấn' },
+  { href: '#projects', label: 'Dự án' },
+  { href: '#manifesto', label: 'Triết lý' },
+  { href: '#contact', label: 'Liên hệ' },
 ];
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY >= 20);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    const handleScroll = () => {
+      // Background styling trigger on scroll
+      setScrolled(window.scrollY >= 20);
+
+      // Scroll progress bar
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setScrollProgress(window.scrollY / totalScroll);
+      }
+
+      // Active section highlight
+      const sections = ['home', 'services', 'experience', 'stack', 'education', 'projects', 'manifesto', 'contact'];
+      for (const section of sections) {
+        const el = document.getElementById(section);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 120 && rect.bottom >= 120) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -35,149 +58,127 @@ export default function SiteHeader() {
     };
   }, [open]);
 
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setOpen(false);
+    const targetId = href.replace('#', '');
+    const el = document.getElementById(targetId);
+    if (el) {
+      const offset = 72; // Header height
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = el.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
-    <header
-      className={cn(
-        'fixed top-0 inset-x-0 z-50 transition-all duration-300 nav-shell pointer-events-auto',
-        scrolled && 'sticky'
-      )}
-    >
-      <div className="section-shell h-full flex items-center justify-between gap-4">
-        {/* Brand Logo */}
-        <Link
-          href="/"
-          className="group flex items-center gap-2 font-black text-xl tracking-tight shrink-0"
-          onClick={() => setOpen(false)}
-        >
-          <div className="relative w-10 h-10 select-none">
-            <Image
-              src="/Assets/logo.png"
-              alt="brand logo"
-              fill
-              className="object-contain logo"
-            />
-          </div>
-        </Link>
-
-        {/* Desktop Navigation Links with Icons */}
-        <nav className="hidden md:flex items-center gap-1">
-          {links.map((link) => {
-            const Icon = link.icon;
-            const isActive = pathname === link.href;
-            return (
-              <div key={link.href} className="navbar-nav">
-                <div className="nav-item">
-                  <Link
-                    href={link.href}
-                    className={cn(
-                      'nav-link flex items-center gap-2 font-medium text-white/95 transition-all relative group',
-                      isActive && 'purple'
-                    )}
-                  >
-                    <Icon className="w-4 h-4 shrink-0" />
-                    <span>{link.label}</span>
-                  </Link>
-                </div>
-              </div>
-            );
-          })}
-
-          {/* Blogs external link */}
-          <div className="navbar-nav">
-            <div className="nav-item">
-              <a
-                href="https://soumyajitblogs.vercel.app/"
-                target="_blank"
-                rel="noreferrer"
-                className="nav-link flex items-center gap-2 font-medium text-white/95 transition-all relative group"
-              >
-                <BookOpen className="w-4 h-4 shrink-0" />
-                <span>Blogs</span>
-              </a>
-            </div>
-          </div>
-        </nav>
-
-        {/* Action Items */}
-        <div className="flex items-center gap-2.5">
-          {/* GitHub Fork & Star Button */}
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 border-b border-line bg-bg/70 backdrop-blur-md transition-all duration-300 ${
+          scrolled ? 'py-3' : 'py-5'
+        }`}
+      >
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5">
+          {/* Brand logo link */}
           <a
-            href={portfolioConfig.owner.github}
-            target="_blank"
-            rel="noreferrer"
-            className="fork-btn-inner hidden sm:inline-flex items-center gap-2.5 px-4 py-2 rounded-lg text-sm font-bold bg-[#934cce5e] border border-[#934cce5e] text-white hover:bg-[#a24dd386] hover:border-[#a24dd386] hover:-translate-y-[2px] transition-all"
-            title="Star on GitHub"
+            href="#home"
+            onClick={(e) => handleLinkClick(e, '#home')}
+            className="font-mono text-sm font-semibold tracking-tight text-fg hover:opacity-80 transition-opacity"
           >
-            <GitFork className="w-4 h-4" />
-            <Star className="w-4 h-4 fill-white" />
+            <span className="text-cyan">/</span>nguyenhanhphuc.dev
           </a>
 
-          <ThemeSwitcher />
+          {/* Desktop Nav menu */}
+          <nav aria-label="Danh mục" className="hidden items-center gap-5 whitespace-nowrap lg:flex xl:gap-8">
+            {links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={(e) => handleLinkClick(e, link.href)}
+                className={`font-mono text-xs transition-colors hover:text-fg ${
+                  activeSection === link.href.replace('#', '') ? 'text-cyan font-medium' : 'text-muted'
+                }`}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
 
-          {/* Mobile Menu Toggler */}
-          <button
-            type="button"
-            className="md:hidden p-2 rounded-lg border border-[var(--border)] text-[#be50f4] hover:text-white transition-colors"
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
-      </div>
+          {/* Header Actions */}
+          <div className="flex items-center gap-4">
+            {/* Language Selection Indicator */}
+            <div className="flex items-center gap-1 font-mono text-xs">
+              <span className="text-muted/40">EN</span>
+              <span className="text-muted/40">/</span>
+              <span className="text-cyan">VI</span>
+            </div>
 
-      {/* Mobile Menu */}
-      {open ? (
-        <div className="md:hidden border-t border-[var(--border)] bg-[#181a27] backdrop-blur-2xl">
-          <nav className="section-shell py-6 flex flex-col gap-2">
-            {links.map((link) => {
-              const Icon = link.icon;
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    'px-4 py-3 text-base font-semibold rounded-xl hover:bg-purple-500/10 text-white/90 hover:text-[#c770f0] transition-colors flex items-center gap-3',
-                    isActive && 'purple'
-                  )}
-                  onClick={() => setOpen(false)}
-                >
-                  <Icon className="w-5 h-5 shrink-0" />
-                  <span>{link.label}</span>
-                </Link>
-              );
-            })}
-
-            {/* Blogs Link in Mobile */}
+            {/* CV Download Button */}
             <a
-              href="https://soumyajitblogs.vercel.app/"
+              href="/resume.pdf"
               target="_blank"
-              rel="noreferrer"
-              className="px-4 py-3 text-base font-semibold rounded-xl hover:bg-purple-500/10 text-white/90 hover:text-[#c770f0] transition-colors flex items-center gap-3"
-              onClick={() => setOpen(false)}
+              rel="noopener noreferrer"
+              download="Resume_NguyenHanhPhuc.pdf"
+              className="hidden rounded-full border border-line bg-white/[0.02] px-4 py-1.5 font-mono text-xs text-fg transition-all hover:border-cyan hover:bg-cyan/5 hover:text-cyan lg:inline-block"
             >
-              <BookOpen className="w-5 h-5 shrink-0" />
-              <span>Blogs</span>
+              Tải CV
             </a>
 
-            {/* GitHub Link in Mobile */}
-            <div className="pt-4 flex items-center gap-3">
+            {/* Mobile Nav Button */}
+            <button
+              type="button"
+              aria-expanded={open}
+              aria-label="Danh mục"
+              onClick={() => setOpen((prev) => !prev)}
+              className="font-mono text-sm text-fg lg:hidden focus:outline-none p-1"
+            >
+              {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Progress scroll bar under header */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-x-0 top-[var(--header-h)] z-50 h-0.5 origin-left bg-gradient-to-r from-cyan via-magenta to-lime transition-transform duration-100 ease-out"
+        style={{ transform: `scaleX(${scrollProgress})`, height: '2px' }}
+      ></div>
+
+      {/* Mobile Nav Drawer */}
+      {open && (
+        <div className="fixed inset-0 z-40 bg-bg/95 backdrop-blur-md lg:hidden">
+          <nav className="flex h-full flex-col justify-center items-center gap-6 px-5 font-mono">
+            {links.map((link) => (
               <a
-                href={portfolioConfig.owner.github}
-                target="_blank"
-                rel="noreferrer"
-                className="flex-1 py-3 px-4 rounded-xl text-xs font-bold bg-[#934cce5e] border border-[#934cce5e] text-white flex items-center justify-center gap-2"
+                key={link.href}
+                href={link.href}
+                onClick={(e) => handleLinkClick(e, link.href)}
+                className={`text-lg transition-colors hover:text-fg ${
+                  activeSection === link.href.replace('#', '') ? 'text-cyan font-bold' : 'text-muted'
+                }`}
               >
-                <GitFork className="w-4 h-4" />
-                <Star className="w-4 h-4 fill-white" />
-                <span>Star on GitHub</span>
+                {link.label}
               </a>
-            </div>
+            ))}
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              download="Resume_NguyenHanhPhuc.pdf"
+              className="mt-4 rounded-full border border-line px-6 py-2.5 text-sm text-fg transition-all hover:border-cyan hover:text-cyan"
+            >
+              Tải CV
+            </a>
           </nav>
         </div>
-      ) : null}
-    </header>
+      )}
+    </>
   );
 }
