@@ -1,25 +1,25 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
-import { portfolioConfig } from '@/config/portfolio';
-
-const links = [
-  { href: '#services', label: 'Dịch vụ' },
-  { href: '#experience', label: 'Kinh nghiệm' },
-  { href: '#stack', label: 'Công nghệ' },
-  { href: '#education', label: 'Học vấn' },
-  { href: '#projects', label: 'Dự án' },
-  { href: '#manifesto', label: 'Triết lý' },
-  { href: '#contact', label: 'Liên hệ' },
-];
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function SiteHeader() {
+  const { language, setLanguage, t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('home');
+
+  const links = [
+    { href: '#services', label: t.nav.services },
+    { href: '#experience', label: t.nav.experience },
+    { href: '#stack', label: t.nav.stack },
+    { href: '#education', label: t.nav.education },
+    { href: '#projects', label: t.nav.projects },
+    { href: '#manifesto', label: t.nav.manifesto },
+    { href: '#contact', label: t.nav.contact },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -112,11 +112,27 @@ export default function SiteHeader() {
 
           {/* Header Actions */}
           <div className="flex items-center gap-4">
-            {/* Language Selection Indicator */}
-            <div className="flex items-center gap-1 font-mono text-xs">
-              <span className="text-muted/40">EN</span>
+            {/* Language Selection Toggle */}
+            <div className="flex items-center gap-1 font-mono text-xs select-none">
+              <button
+                type="button"
+                onClick={() => setLanguage('en')}
+                className={`transition-colors duration-200 focus:outline-none ${
+                  language === 'en' ? 'text-cyan font-bold' : 'text-muted hover:text-fg'
+                }`}
+              >
+                EN
+              </button>
               <span className="text-muted/40">/</span>
-              <span className="text-cyan">VI</span>
+              <button
+                type="button"
+                onClick={() => setLanguage('vi')}
+                className={`transition-colors duration-200 focus:outline-none ${
+                  language === 'vi' ? 'text-cyan font-bold' : 'text-muted hover:text-fg'
+                }`}
+              >
+                VI
+              </button>
             </div>
 
             {/* CV Download Button */}
@@ -127,7 +143,7 @@ export default function SiteHeader() {
               download="Resume_NguyenHanhPhuc.pdf"
               className="hidden rounded-full border border-line bg-white/[0.02] px-4 py-1.5 font-mono text-xs text-fg transition-all hover:border-cyan hover:bg-cyan/5 hover:text-cyan lg:inline-block"
             >
-              Tải CV
+              {t.nav.downloadCv}
             </a>
 
             {/* Mobile Nav Button */}
@@ -174,7 +190,7 @@ export default function SiteHeader() {
               download="Resume_NguyenHanhPhuc.pdf"
               className="mt-4 rounded-full border border-line px-6 py-2.5 text-sm text-fg transition-all hover:border-cyan hover:text-cyan"
             >
-              Tải CV
+              {t.nav.downloadCv}
             </a>
           </nav>
         </div>

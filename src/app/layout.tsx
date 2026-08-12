@@ -6,6 +6,7 @@ import './globals.css';
 import SiteHeader from '@/components/layout/site-header';
 import SiteFooter from '@/components/layout/site-footer';
 import ParticleBackground from '@/components/ui/particle-background';
+import { LanguageProvider } from '@/context/LanguageContext';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -36,25 +37,27 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${display.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col selection:bg-indigo-500/30 selection:text-white bg-[#0c0513]">
-        {/* Preloader */}
-        <div id={load ? 'preloader' : 'preloader-none'} />
+        <LanguageProvider>
+          {/* Preloader */}
+          <div id={load ? 'preloader' : 'preloader-none'} />
 
-        {/* Scroll Control Wrapper */}
-        <div className="flex flex-col min-h-screen" id={load ? 'no-scroll' : 'scroll'}>
-          {/* Particle Background */}
-          <ParticleBackground />
+          {/* Scroll Control Wrapper */}
+          <div className="flex flex-col min-h-screen" id={load ? 'no-scroll' : 'scroll'}>
+            {/* Particle Background */}
+            <ParticleBackground />
 
-          {/* Header */}
-          <SiteHeader />
+            {/* Header */}
+            <SiteHeader />
 
-          {/* Main Content */}
-          <main className="relative z-10 flex-grow pt-[var(--header-h)]">
-            {children}
-          </main>
+            {/* Main Content */}
+            <main className="relative z-10 flex-grow pt-[var(--header-h)]">
+              {children}
+            </main>
 
-          {/* Footer */}
-          <SiteFooter />
-        </div>
+            {/* Footer */}
+            <SiteFooter />
+          </div>
+        </LanguageProvider>
       </body>
     </html>
   );

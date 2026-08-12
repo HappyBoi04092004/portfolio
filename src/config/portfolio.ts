@@ -40,17 +40,261 @@ export interface SkillCategory {
   skills: { name: string; level: number; info: string }[];
 }
 
-export const portfolioConfig = {
+// Shared GitHub stats to keep random contribution arrays consistent
+const sharedGithubStats = {
+  totalCommits: 2439,
+  streak: 42,
+  repositoriesCount: 38,
+  primaryLanguages: [
+    { name: "Go", percentage: 45, color: "bg-cyan-500" },
+    { name: "Dart (Flutter)", percentage: 35, color: "bg-blue-400" },
+    { name: "TypeScript", percentage: 15, color: "bg-amber-400" },
+    { name: "Shell & Others", percentage: 5, color: "bg-gray-500" }
+  ],
+  // High-fidelity fake calendar matrix (53 weeks * 7 days)
+  contributions: Array.from({ length: 371 }, (_, i) => {
+    const weekIndex = Math.floor(i / 7);
+    const dayIndex = i % 7;
+    let count = 0;
+    
+    // Weekends have fewer commits
+    const isWeekend = dayIndex === 0 || dayIndex === 6;
+    const baseChance = isWeekend ? 0.2 : 0.7;
+    
+    if (Math.random() < baseChance) {
+      count = Math.floor(Math.random() * 8);
+      
+      // Give certain periods (like sprints) higher volume
+      if (weekIndex % 8 === 0 || weekIndex % 12 === 3) {
+        count += Math.floor(Math.random() * 5);
+      }
+    }
+    
+    return count;
+  })
+};
+
+// Common/Shared non-translatable fields
+const sharedLinks = {
+  email: "nguyenhanhphuc.dev@gmail.com",
+  github: "https://github.com/HappyBoi04092004",
+  linkedin: "https://linkedin.com/in/nguyenhanhphuc",
+  facebook: "https://www.facebook.com/hanhphuc.nguyen.148553",
+  resumeUrl: "#"
+};
+
+// Vietnamese Configuration
+export const portfolioConfigVi = {
   owner: {
     name: "Nguyễn Hạnh Phúc",
-    roles: ["Backend Developer", "Flutter Developer", "Software Engineer"],
+    roles: ["Backend Architect", "Flutter / Mobile Dev", "Systems Engineer"],
+    headline: "Kiến trúc hệ thống Backend hiệu năng cao & Trải nghiệm Di động mượt mà",
+    subHeadline: "Phát triển hệ thống máy chủ có khả năng mở rộng, ứng dụng di động đa nền tảng và kiến trúc đám mây mạnh mẽ với mã nguồn sạch cùng hệ thống thiết kế hiện đại.",
+    ...sharedLinks
+  },
+  
+  about: {
+    mission: "Phát triển các hệ thống backend an toàn, có khả năng mở rộng cao và các trải nghiệm di động chất lượng cao nhằm kết nối giữa sự phức tạp kỹ thuật và tương tác tinh tế của người dùng.",
+    vision: "Vượt qua giới hạn của không gian làm việc số, tận dụng công nghệ 3D, triển khai cloud-native và các tiêu chuẩn kiến trúc nghiêm ngặt để thiết kế tương lai của phần mềm.",
+    story: "Bắt đầu hành trình là một sinh viên khoa học máy tính có niềm đam mê với logic, tôi đã yêu thích kỹ thuật backend—đặc biệt là thử thách mở rộng quy mô các API để xử lý hàng triệu giao dịch. Nhận thấy tầm quan trọng của trải nghiệm người dùng cuối, tôi đã thành thạo Flutter để phát triển các ứng dụng di động đa nền tảng hiện đại. Hiện nay, tôi xây dựng các giải pháp full-stack với kiến trúc sạch, tập trung vào trải nghiệm của lập trình viên, các giao thức kiểm thử nghiêm ngặt và tự động hóa CI/CD mạnh mẽ.",
+    stats: [
+      { label: "Số năm kinh nghiệm", value: 4, suffix: "+" },
+      { label: "Dự án đã hoàn thành", value: 25, suffix: "" },
+      { label: "Kho lưu trữ hoạt động", value: 42, suffix: "" },
+      { label: "Commit (giả lập) năm nay", value: 1842, suffix: "+" },
+    ]
+  },
+
+  skills: [
+    {
+      title: "Kỹ thuật Backend",
+      icon: "Server",
+      skills: [
+        { name: "Go (Golang)", level: 90, info: "Microservices, gRPC, Gin, Fiber, Concurrency với Goroutines" },
+        { name: "Node.js / NestJS", level: 95, info: "TypeScript, REST APIs, TypeORM, Prisma, WebSockets" },
+        { name: "Python / FastAPI", level: 85, info: "AsyncIO, xử lý dữ liệu, pipelines học máy" },
+        { name: "Java / Spring Boot", level: 80, info: "APIs doanh nghiệp, Hibernate, Maven, kiểm thử JUnit" },
+      ]
+    },
+    {
+      title: "Phát triển Di động",
+      icon: "Smartphone",
+      skills: [
+        { name: "Flutter & Dart", level: 92, info: "Quản lý trạng thái BLoC, Kiến trúc sạch (Clean Architecture), Custom Painter UI" },
+        { name: "React Native", level: 80, info: "Expo, TS, liên kết native modules, hiệu ứng reanimated" },
+        { name: "Tích hợp Native iOS/Android", level: 78, info: "Method channels, Gradle scripting, cơ bản về Swift & Kotlin" },
+      ]
+    },
+    {
+      title: "Cơ sở dữ liệu & Bộ nhớ đệm",
+      icon: "Database",
+      skills: [
+        { name: "PostgreSQL", level: 90, info: "Tối ưu hóa Index, truy vấn CTE, cột JSONB, cấu hình replication" },
+        { name: "MongoDB", level: 88, info: "Aggregation framework, sharding, thiết kế mô hình tài liệu" },
+        { name: "Redis", level: 85, info: "Chiến lược bộ nhớ đệm, distributed locks, pub-sub messaging" },
+        { name: "Elasticsearch", level: 75, info: "Cấu hình chỉ mục tìm kiếm toàn văn, tối ưu hóa truy vấn" },
+      ]
+    },
+    {
+      title: "Điện toán Đám mây & DevOps",
+      icon: "Cloud",
+      skills: [
+        { name: "Docker & K8s", level: 85, info: "Container hóa, mạng lưới pod, Helm charts, Docker Compose" },
+        { name: "AWS Services", level: 80, info: "EC2, ECS, Lambda (Serverless), RDS, S3, CloudFront, IAM" },
+        { name: "CI/CD Pipelines", level: 88, info: "GitHub Actions, GitLab CI, tự động hóa kiểm thử & phát hành ngữ nghĩa" },
+        { name: "Linux / Bash", level: 85, info: "Cấu hình máy chủ, viết mã lệnh cron, giám sát tiến trình" }
+      ]
+    }
+  ] as SkillCategory[],
+
+  projects: [
+    {
+      id: "skyroute",
+      title: "SkyRoute Logistics",
+      subtitle: "Hệ thống đặt xe & Điều phối vận tải doanh nghiệp",
+      description: "API định tuyến logistics có khả năng mở rộng cao và ứng dụng Flutter tương ứng giúp quản lý tối ưu hóa tuyến đường nhiều điểm dừng, điều phối tài xế và theo dõi thời gian thực.",
+      category: "fullstack",
+      techStack: ["Go", "Flutter", "PostgreSQL", "Redis", "Google Maps API", "Docker", "gRPC"],
+      architecture: "Clean Architecture trên Di động, Domain-Driven Design (DDD) trên Backend",
+      challenges: "Đồng bộ hóa điều phối theo thời gian thực giữa ứng dụng Flutter của tài xế và máy chủ Go trung tâm khi mất kết nối mạng mà không làm mất các gói tin đo lường.",
+      lessonsLearned: "Thiết kế cơ sở dữ liệu SQL cục bộ hoạt động ngoại tuyến (offline-first) trong Flutter, gom cụm nhật ký vị trí GPS và đồng bộ hóa chúng một cách an toàn bằng middleware tự động thử lại.",
+      githubUrl: "https://github.com/nguyenhanhphuc/skyroute-logistics",
+      liveUrl: "https://skyroute.example.com",
+      caseStudy: "SkyRoute Logistics hoạt động tại 5 quốc gia Đông Nam Á. Backend Go sử dụng hàng đợi ưu tiên tùy chỉnh để điều phối tác vụ cho tài xế. Bằng cách chuyển từ REST sang gRPC, kích thước thông điệp nhị phân giảm 60%, giúp cải thiện 40% hiệu năng pin của thiết bị di động.",
+      color: "from-blue-600 to-indigo-800"
+    },
+    {
+      id: "paypulse",
+      title: "PayPulse Gateway",
+      subtitle: "Hệ thống điều phối thanh toán thông lượng cao",
+      description: "Hệ thống backend giao dịch cho phép thanh toán qua API của nhiều nhà cung cấp tích hợp với két lưu trữ thẻ multi-tenant, kiểm toán gian lận và đối soát tự động.",
+      category: "backend",
+      techStack: ["NestJS", "TypeScript", "PostgreSQL", "Kafka", "Redis", "Kubernetes", "AWS RDS"],
+      architecture: "Kiến trúc hướng sự kiện (Event-Driven Microservices) sử dụng Apache Kafka & mẫu thiết kế CQRS",
+      challenges: "Đảm bảo xử lý giao dịch đúng duy nhất một lần (exactly-once) dưới lượng truy cập cực lớn lên tới hơn 10.000 RPS trong các mùa khuyến mãi.",
+      lessonsLearned: "Tận dụng khóa phân tán bằng Redis (Redlock) kết hợp với các cấp độ cô lập giao dịch PostgreSQL và khóa API consumer có tính không đổi (idempotent).",
+      githubUrl: "https://github.com/nguyenhanhphuc/paypulse-gateway",
+      liveUrl: "https://paypulse.example.com",
+      caseStudy: "PayPulse đã xử lý an toàn các giao dịch cho hơn 20 cổng đối tác đồng thời. Hệ thống lưu trữ thẻ bảo mật với mã hóa AES-256 GCM bất đối xứng bên trong các namespaces Docker cô lập. Tốc độ giải quyết giao dịch trung bình giảm xuống dưới 150ms trên toàn cầu.",
+      color: "from-cyan-600 to-teal-800"
+    },
+    {
+      id: "mediconnect",
+      title: "MediConnect App",
+      subtitle: "Ứng dụng Di động tư vấn video & Hồ sơ bệnh án Telehealth",
+      description: "Cổng thông tin chăm sóc sức khỏe đa nền tảng tuân thủ tiêu chuẩn HIPAA, cho phép bệnh nhân tư vấn bác sĩ an toàn, xem đơn thuốc điện tử và đồng bộ hóa chỉ số sức khỏe.",
+      category: "mobile",
+      techStack: ["Flutter", "Dart", "WebRTC", "Node.js", "MongoDB", "Firebase Cloud Messaging"],
+      architecture: "Quản lý trạng thái BLoC với mẫu thiết kế Repository",
+      challenges: "Thiết lập các luồng truyền phát WebRTC có độ trễ thấp với chất lượng cao trên các thiết bị di động cấu hình thấp ở các vùng có tín hiệu 3G yếu.",
+      lessonsLearned: "Tích hợp tối ưu hóa máy chủ STUN/TURN và viết mã lệnh tự động điều chỉnh tốc độ bit thích ứng để thay đổi khung hình camera động dựa trên số liệu kết nối WebRTC.",
+      githubUrl: "https://github.com/nguyenhanhphuc/mediconnect-app",
+      liveUrl: "https://mediconnect.example.com",
+      caseStudy: "MediConnect đã được triển khai cho các phòng khám vùng sâu vùng xa, hỗ trợ hơn 5.000 ca tư vấn từ xa hoạt động. Giao diện người dùng được tối ưu hóa cho độ tương phản tối đa, đáp ứng quy tắc tiếp cận WCAG AAA dành cho bệnh nhân khiếm thị.",
+      color: "from-purple-600 to-pink-800"
+    },
+    {
+      id: "cloudguard",
+      title: "CloudGuard Daemon",
+      subtitle: "Tiến trình chạy ẩn giám sát sức khỏe máy chủ & Kiểm toán đe dọa",
+      description: "Một daemon Linux backend nhẹ theo dõi các thay đổi đối với hệ thống tệp, kiểm toán nhân (kernel audits) và ghi nhận các sự kiện bất thường về một node Elasticsearch trung tâm.",
+      category: "backend",
+      techStack: ["Go", "eBPF", "Linux API", "Elasticsearch", "Docker"],
+      architecture: "Monolithic CLI Agent sử dụng các bộ dò Linux eBPF",
+      challenges: "Trích xuất nhật ký kiểm toán hệ thống mà không vượt quá giới hạn sử dụng CPU 1% trên các máy chủ production của khách hàng.",
+      lessonsLearned: "Viết các bộ dò assembly hiệu năng cao bên trong không gian nhân Linux sử dụng eBPF, truyền dữ liệu đo lường sang không gian người dùng thông qua các bộ đệm vòng (ring buffers)." ,
+      githubUrl: "https://github.com/nguyenhanhphuc/cloudguard-daemon",
+      liveUrl: "https://cloudguard.example.com",
+      caseStudy: "CloudGuard được triển khai trên hơn 500 cụm VM staging. Nó ghi nhận các thay đổi quyền tệp quan trọng trong vòng 2ms, cảnh báo tức thì cho quản trị viên hệ thống qua tích hợp Webhook.",
+      color: "from-emerald-600 to-teal-900"
+    }
+  ] as Project[],
+
+  experience: [
+    {
+      id: "exp-1",
+      role: "Kỹ sư Phần mềm Cao cấp",
+      company: "Aura Tech Solutions",
+      location: "Thành phố Hồ Chí Minh, Việt Nam",
+      period: "2024 - Hiện tại",
+      description: [
+        "Kiến trúc các dịch vụ microservices backend có khả năng mở rộng bằng Go và NestJS, tăng độ ổn định hệ thống thêm 30%.",
+        "Phát triển các ứng dụng di động Flutter cốt lõi, tích hợp cơ sở dữ liệu SQL cục bộ với tính năng đồng bộ hóa ngoại tuyến.",
+        "Tối ưu hóa lược đồ cơ sở dữ liệu quan hệ trong PostgreSQL, mang lại tốc độ cải thiện 45% cho các truy vấn tìm kiếm nặng.",
+        "Thiết lập quy trình triển khai CI/CD trên AWS ECS bằng cách sử dụng GitHub Actions, giảm thời gian phát hành từ nhiều giờ xuống còn 5 phút."
+      ],
+      skills: ["Go", "NestJS", "Flutter", "PostgreSQL", "AWS", "GitHub Actions"]
+    },
+    {
+      id: "exp-2",
+      role: "Nhà phát triển Backend & Mobile",
+      company: "Nexus Software Hub",
+      location: "Đà Nẵng, Việt Nam",
+      period: "2022 - 2024",
+      description: [
+        "Triển khai các ứng dụng di động chất lượng cao bằng Flutter, áp dụng các mẫu BLoC sạch và vẽ giao diện tùy chỉnh.",
+        "Xây dựng các REST APIs đa người dùng (multi-tenant) bằng Node.js, quản lý tích hợp cho nhiều nhà cung cấp thanh toán bên thứ ba.",
+        "Sử dụng các lớp bộ nhớ đệm Redis, giảm thiểu thành công tải cơ sở dữ liệu đột biến trong thời gian cao điểm của chiến dịch.",
+        "Viết các bộ kiểm thử unit/integration toàn diện, nâng độ bao phủ mã nguồn (code coverage) lên 92%."
+      ],
+      skills: ["Flutter", "Node.js", "Redis", "TypeScript", "Jest", "Docker"]
+    },
+    {
+      id: "exp-3",
+      role: "Nhà phát triển Backend Junior",
+      company: "VietSoft Innovators",
+      location: "Hà Nội, Việt Nam",
+      period: "2021 - 2022",
+      description: [
+        "Thiết kế và bảo trì các ứng dụng Spring Boot backend phục vụ các nền tảng thanh toán hóa đơn doanh nghiệp.",
+        "Hỗ trợ các hoạt động di chuyển cơ sở dữ liệu, chuyển đổi cấu trúc cũ sang cụm PostgreSQL hiện đại.",
+        "Tham gia các hoạt động agile, viết tài liệu chi tiết cho các endpoint API mới được tạo."
+      ],
+      skills: ["Java", "Spring Boot", "PostgreSQL", "Git", "Swagger"]
+    }
+  ] as Experience[],
+
+  certificates: [
+    {
+      id: "cert-1",
+      title: "AWS Certified Solutions Architect – Associate",
+      issuer: "Amazon Web Services (AWS)",
+      date: "T12 / 2025",
+      credentialId: "AWS-ASA-99432",
+      url: "https://aws.amazon.com",
+      color: "#ff9900"
+    },
+    {
+      id: "cert-2",
+      title: "Google Professional Cloud Developer",
+      issuer: "Google Cloud",
+      date: "T8 / 2025",
+      credentialId: "GCP-PCD-11234",
+      url: "https://cloud.google.com",
+      color: "#4285f4"
+    },
+    {
+      id: "cert-3",
+      title: "Flutter Certified Application Developer",
+      issuer: "Android ATC",
+      date: "T3 / 2024",
+      credentialId: "FL-ATC-4482",
+      url: "https://androidatc.com",
+      color: "#02569B"
+    }
+  ] as Certificate[],
+
+  githubStats: sharedGithubStats
+};
+
+// English Configuration
+export const portfolioConfigEn = {
+  owner: {
+    name: "Nguyễn Hạnh Phúc",
+    roles: ["Backend Architect", "Flutter / Mobile Dev", "Systems Engineer"],
     headline: "Architecting High-Performance Backends & Seamless Mobile Experiences",
     subHeadline: "Crafting scalable server-side systems, cross-platform mobile apps, and robust cloud architectures with clean code and modern design systems.",
-    email: "nguyenhanhphuc.dev@gmail.com",
-    github: "https://github.com/HappyBoi04092004",
-    linkedin: "https://linkedin.com/in/nguyenhanhphuc",
-    facebook: "https://www.facebook.com/hanhphuc.nguyen.148553",
-    resumeUrl: "#", // Standard placeholder link that can be bound to public/resume.pdf
+    ...sharedLinks
   },
   
   about: {
@@ -244,38 +488,10 @@ export const portfolioConfig = {
     }
   ] as Certificate[],
 
-  githubStats: {
-    totalCommits: 2439,
-    streak: 42,
-    repositoriesCount: 38,
-    primaryLanguages: [
-      { name: "Go", percentage: 45, color: "bg-cyan-500" },
-      { name: "Dart (Flutter)", percentage: 35, color: "bg-blue-400" },
-      { name: "TypeScript", percentage: 15, color: "bg-amber-400" },
-      { name: "Shell & Others", percentage: 5, color: "bg-gray-500" }
-    ],
-    // High-fidelity fake calendar matrix (53 weeks * 7 days)
-    contributions: Array.from({ length: 371 }, (_, i) => {
-      // Create interesting patterns with peaks and quiet periods
-      const weekIndex = Math.floor(i / 7);
-      const dayIndex = i % 7;
-      let count = 0;
-      
-      // Weekends have fewer commits
-      const isWeekend = dayIndex === 0 || dayIndex === 6;
-      const baseChance = isWeekend ? 0.2 : 0.7;
-      
-      if (Math.random() < baseChance) {
-        // Random commit amount
-        count = Math.floor(Math.random() * 8);
-        
-        // Give certain periods (like sprints) higher volume
-        if (weekIndex % 8 === 0 || weekIndex % 12 === 3) {
-          count += Math.floor(Math.random() * 5);
-        }
-      }
-      
-      return count;
-    })
-  }
+  githubStats: sharedGithubStats
 };
+
+// Default export fallback configuration (defaults to Vietnamese to avoid breaking any quick imports)
+export const portfolioConfig = portfolioConfigVi;
+
+export type PortfolioConfig = typeof portfolioConfigEn;

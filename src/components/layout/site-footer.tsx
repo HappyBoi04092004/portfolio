@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
-import { portfolioConfig } from '@/config/portfolio';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function SiteFooter() {
+  const { portfolioData } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -14,7 +15,7 @@ export default function SiteFooter() {
             <span className="text-cyan">/</span>nguyenhanhphuc.dev
           </a>
           <p className="mt-2 font-mono text-xs text-muted">
-            {portfolioConfig.owner.headline}
+            {portfolioData.owner.headline}
           </p>
         </div>
         <p className="font-mono text-[11px] text-muted/60">

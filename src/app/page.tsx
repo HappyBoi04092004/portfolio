@@ -1,28 +1,30 @@
 'use client';
 
 import React from 'react';
-import { portfolioConfig } from '@/config/portfolio';
+import { useLanguage } from '@/context/LanguageContext';
 import { 
-  Code, 
-  Layers, 
-  Cpu, 
-  Terminal, 
+  ArrowRight,
   Server, 
   Smartphone, 
   Database, 
-  Cloud, 
-  FileCheck, 
-  ArrowRight,
-  Mail,
+  Cloud,
   Phone
 } from 'lucide-react';
 import { FaGithub, FaLinkedinIn, FaFacebookF } from 'react-icons/fa';
 
+const servicesThemes = [
+  { color: 'cyan', dot: 'bg-cyan', arrow: 'text-cyan', hover: 'hover:border-cyan/60' },
+  { color: 'magenta', dot: 'bg-magenta', arrow: 'text-magenta', hover: 'hover:border-magenta/60' },
+  { color: 'lime', dot: 'bg-lime', arrow: 'text-lime', hover: 'hover:border-lime/60' },
+  { color: 'violet', dot: 'bg-violet', arrow: 'text-violet', hover: 'hover:border-violet/60' }
+];
+
 export default function HomePage() {
-  const owner = portfolioConfig.owner;
-  const projects = portfolioConfig.projects;
-  const experience = portfolioConfig.experience;
-  const certificates = portfolioConfig.certificates;
+  const { portfolioData, t } = useLanguage();
+  const owner = portfolioData.owner;
+  const projects = portfolioData.projects;
+  const experience = portfolioData.experience;
+  const certificates = portfolioData.certificates;
 
   const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
@@ -51,23 +53,18 @@ export default function HomePage() {
         <div className="relative z-10 mx-auto max-w-6xl px-5">
           {/* Header Roles tags */}
           <div className="mb-8 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs text-muted">
-            <span className="flex items-center gap-3">
-              <span>Backend Architect</span>
-            </span>
-            <span className="flex items-center gap-3">
-              <span className="text-line">·</span>
-              <span>Flutter / Mobile Dev</span>
-            </span>
-            <span className="flex items-center gap-3">
-              <span className="text-line">·</span>
-              <span>Systems Engineer</span>
-            </span>
+            {t.hero.roles.map((role, idx) => (
+              <span key={role} className="flex items-center gap-3">
+                {idx > 0 && <span className="text-line">·</span>}
+                <span>{role}</span>
+              </span>
+            ))}
           </div>
 
           {/* Big Hero Title */}
           <h1 className="text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl md:text-8xl">
-            Architecting Systems.<br/>
-            <span className="text-gradient">Then I scale.</span>
+            {t.hero.title1}<br/>
+            <span className="text-gradient">{t.hero.title2}</span>
           </h1>
 
           {/* Headline description */}
@@ -82,14 +79,14 @@ export default function HomePage() {
               onClick={(e) => handleScrollTo(e, 'contact')}
               className="rounded-full bg-cyan px-6 py-3 font-medium text-bg transition-transform hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(0,245,255,0.4)]"
             >
-              Hợp tác ngay
+              {t.hero.ctaHire}
             </a>
             <a
               href="#projects"
               onClick={(e) => handleScrollTo(e, 'projects')}
               className="rounded-full border border-line bg-white/[0.02] px-6 py-3 text-fg transition-colors hover:border-fg/40 hover:bg-white/[0.05]"
             >
-              Khám phá dự án
+              {t.hero.ctaProjects}
             </a>
             <a
               href="/resume.pdf"
@@ -98,23 +95,23 @@ export default function HomePage() {
               download="Resume_NguyenHanhPhuc.pdf"
               className="rounded-full border border-line bg-white/[0.02] px-6 py-3 text-fg transition-colors hover:border-fg/40 hover:bg-white/[0.05]"
             >
-              Tải CV
+              {t.hero.ctaCv}
             </a>
           </div>
 
           {/* Hero Bottom Stats grid */}
           <dl className="mt-20 grid max-w-2xl grid-cols-1 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3">
             <div className="bg-bg-soft p-5">
-              <dt className="font-mono text-xs uppercase tracking-wider text-muted">Vị trí</dt>
+              <dt className="font-mono text-xs uppercase tracking-wider text-muted">{t.hero.location}</dt>
               <dd className="mt-1 text-sm font-medium">Hanoi / Remote / Hybrid</dd>
             </div>
             <div className="bg-bg-soft p-5">
-              <dt className="font-mono text-xs uppercase tracking-wider text-muted">Tech Stack</dt>
+              <dt className="font-mono text-xs uppercase tracking-wider text-muted">{t.hero.techStack}</dt>
               <dd className="mt-1 text-sm font-medium">Go, NestJS, Flutter, AWS</dd>
             </div>
             <div className="bg-bg-soft p-5">
-              <dt className="font-mono text-xs uppercase tracking-wider text-muted">Trạng thái</dt>
-              <dd className="mt-1 text-sm font-medium">Sẵn sàng nhận dự án mới</dd>
+              <dt className="font-mono text-xs uppercase tracking-wider text-muted">{t.hero.status}</dt>
+              <dd className="mt-1 text-sm font-medium">{t.hero.statusValue}</dd>
             </div>
           </dl>
         </div>
@@ -123,76 +120,35 @@ export default function HomePage() {
       {/* SERVICES SECTION */}
       <section id="services" className="section-anchor border-t border-line py-24 outline-none">
         <div className="mx-auto max-w-6xl px-5">
-          <p className="font-mono text-xs uppercase tracking-wider text-cyan">Dịch vụ</p>
-          <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">Bốn phương thức hợp tác.</h2>
+          <p className="font-mono text-xs uppercase tracking-wider text-cyan">{t.services.badge}</p>
+          <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">{t.services.title}</h2>
           <p className="mt-4 max-w-xl text-muted">
-            Xây dựng các giải pháp kỹ thuật hiệu năng cao, tối ưu cơ sở dữ liệu và triển khai hệ thống an toàn. Lựa chọn giải pháp phù hợp với mục tiêu của bạn.
+            {t.services.subtitle}
           </p>
 
           <div className="mt-14 grid gap-5 md:grid-cols-2">
-            {/* Service 1: Backend Developer */}
-            <div className="group h-full rounded-2xl border border-line bg-bg-soft p-7 transition-colors hover:border-cyan/60">
-              <div className="flex items-center gap-3">
-                <span className="h-2.5 w-2.5 rounded-full bg-cyan"></span>
-                <h3 className="text-xl font-semibold">Phát triển Backend & APIs</h3>
-              </div>
-              <p className="mt-4 text-sm leading-relaxed text-muted">
-                Kiến trúc và triển khai hệ thống server-side, APIs chịu tải lớn và microservices. Đảm bảo hiệu năng cao, luồng dữ liệu bảo mật và khả năng mở rộng.
-              </p>
-              <ul className="mt-6 space-y-2 font-mono text-xs text-muted">
-                <li className="flex gap-2"><span className="text-cyan">→</span><span>Thiết kế gRPC / REST API tối ưu</span></li>
-                <li className="flex gap-2"><span className="text-cyan">→</span><span>Concurrency & Distributed Systems (Go/NestJS)</span></li>
-                <li className="flex gap-2"><span className="text-cyan">→</span><span>Tự động hóa & Tích hợp Service</span></li>
-              </ul>
-            </div>
-
-            {/* Service 2: Mobile development */}
-            <div className="group h-full rounded-2xl border border-line bg-bg-soft p-7 transition-colors hover:border-magenta/60">
-              <div className="flex items-center gap-3">
-                <span className="h-2.5 w-2.5 rounded-full bg-magenta"></span>
-                <h3 className="text-xl font-semibold">Phát triển Ứng dụng Di động</h3>
-              </div>
-              <p className="mt-4 text-sm leading-relaxed text-muted">
-                Xây dựng ứng dụng di động đa nền tảng chất lượng cao bằng Flutter. Tối ưu hóa UI/UX mượt mà, lưu trữ dữ liệu offline và đồng bộ hóa thời gian thực.
-              </p>
-              <ul className="mt-6 space-y-2 font-mono text-xs text-muted">
-                <li className="flex gap-2"><span className="text-magenta">→</span><span>Ứng dụng đa nền tảng Flutter (iOS & Android)</span></li>
-                <li className="flex gap-2"><span className="text-magenta">→</span><span>Clean Architecture & BLoC state management</span></li>
-                <li className="flex gap-2"><span className="text-magenta">→</span><span>Offline-first & Local Sync engines</span></li>
-              </ul>
-            </div>
-
-            {/* Service 3: DB & Query Tuning */}
-            <div className="group h-full rounded-2xl border border-line bg-bg-soft p-7 transition-colors hover:border-lime/60">
-              <div className="flex items-center gap-3">
-                <span className="h-2.5 w-2.5 rounded-full bg-lime"></span>
-                <h3 className="text-xl font-semibold">Tối ưu Cơ sở dữ liệu & Caching</h3>
-              </div>
-              <p className="mt-4 text-sm leading-relaxed text-muted">
-                Phân tích, thiết kế cấu trúc database và triển khai các giải pháp bộ nhớ đệm (caching). Tối ưu hóa tốc độ truy vấn dữ liệu phức tạp.
-              </p>
-              <ul className="mt-6 space-y-2 font-mono text-xs text-muted">
-                <li className="flex gap-2"><span className="text-lime">→</span><span>Tối ưu hóa PostgreSQL (Index tuning, CTEs)</span></li>
-                <li className="flex gap-2"><span className="text-lime">→</span><span>Redis Caching & Distributed Locks (Redlock)</span></li>
-                <li className="flex gap-2"><span className="text-lime">→</span><span>Search Engine integration (Elasticsearch)</span></li>
-              </ul>
-            </div>
-
-            {/* Service 4: Cloud & DevOps */}
-            <div className="group h-full rounded-2xl border border-line bg-bg-soft p-7 transition-colors hover:border-violet/60">
-              <div className="flex items-center gap-3">
-                <span className="h-2.5 w-2.5 rounded-full bg-violet"></span>
-                <h3 className="text-xl font-semibold">Hạ tầng Cloud & CI/CD</h3>
-              </div>
-              <p className="mt-4 text-sm leading-relaxed text-muted">
-                Container hóa ứng dụng và cấu hình quy trình triển khai tự động. Thiết lập hạ tầng cloud bảo mật, chịu lỗi cao và dễ dàng giám sát.
-              </p>
-              <ul className="mt-6 space-y-2 font-mono text-xs text-muted">
-                <li className="flex gap-2"><span className="text-violet">→</span><span>Dockerization & Kubernetes orchestration</span></li>
-                <li className="flex gap-2"><span className="text-violet">→</span><span>CI/CD Pipelines (GitHub Actions / GitLab CI)</span></li>
-                <li className="flex gap-2"><span className="text-violet">→</span><span>AWS Cloud Infrastructure architecture</span></li>
-              </ul>
-            </div>
+            {t.services.list.map((service, index) => {
+              const theme = servicesThemes[index % servicesThemes.length];
+              return (
+                <div key={index} className={`group h-full rounded-2xl border border-line bg-bg-soft p-7 transition-colors ${theme.hover}`}>
+                  <div className="flex items-center gap-3">
+                    <span className={`h-2.5 w-2.5 rounded-full ${theme.dot}`}></span>
+                    <h3 className="text-xl font-semibold">{service.title}</h3>
+                  </div>
+                  <p className="mt-4 text-sm leading-relaxed text-muted">
+                    {service.desc}
+                  </p>
+                  <ul className="mt-6 space-y-2 font-mono text-xs text-muted">
+                    {service.bullets.map((bullet, idx) => (
+                      <li key={idx} className="flex gap-2">
+                        <span className={theme.arrow}>→</span>
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
           </div>
 
           <div className="mt-12">
@@ -201,7 +157,7 @@ export default function HomePage() {
               onClick={(e) => handleScrollTo(e, 'contact')}
               className="inline-block font-mono text-sm text-cyan underline-offset-4 hover:underline"
             >
-              Liên hệ ngay →
+              {t.services.contactNow}
             </a>
           </div>
         </div>
@@ -210,10 +166,10 @@ export default function HomePage() {
       {/* EXPERIENCE SECTION */}
       <section id="experience" className="section-anchor border-t border-line py-24 outline-none">
         <div className="mx-auto max-w-6xl px-5">
-          <p className="font-mono text-xs uppercase tracking-wider text-cyan">Kinh nghiệm</p>
-          <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">Hành trình của tôi.</h2>
+          <p className="font-mono text-xs uppercase tracking-wider text-cyan">{t.experience.badge}</p>
+          <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">{t.experience.title}</h2>
           <p className="mt-4 max-w-xl text-muted">
-            Các vị trí đảm nhiệm và đóng góp thực tế trên môi trường production.
+            {t.experience.subtitle}
           </p>
 
           <ol className="relative mt-14 space-y-5 before:absolute before:bottom-6 before:left-[7px] before:top-6 before:w-px before:bg-line">
@@ -275,10 +231,10 @@ export default function HomePage() {
       {/* TECH STACK SECTION */}
       <section id="stack" className="section-anchor border-t border-line py-24 outline-none">
         <div className="mx-auto max-w-6xl px-5">
-          <p className="font-mono text-xs uppercase tracking-wider text-lime">Chuyên môn kỹ thuật</p>
-          <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">Technology stack.</h2>
+          <p className="font-mono text-xs uppercase tracking-wider text-lime">{t.stack.badge}</p>
+          <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">{t.stack.title}</h2>
           <p className="mt-4 max-w-xl text-muted">
-            Những công cụ và công nghệ tôi sử dụng hàng ngày để xây dựng sản phẩm chất lượng.
+            {t.stack.subtitle}
           </p>
 
           <div className="mt-14 grid items-start gap-5 md:grid-cols-2 lg:grid-cols-2">
@@ -355,10 +311,10 @@ export default function HomePage() {
       {/* EDUCATION/CERTIFICATES SECTION */}
       <section id="education" className="section-anchor border-t border-line py-24 outline-none">
         <div className="mx-auto max-w-6xl px-5">
-          <p className="font-mono text-xs uppercase tracking-wider text-violet">Học vấn & Chứng chỉ</p>
-          <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">Bằng cấp & Chứng nhận.</h2>
+          <p className="font-mono text-xs uppercase tracking-wider text-violet">{t.education.badge}</p>
+          <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">{t.education.title}</h2>
           <p className="mt-4 max-w-xl text-muted">
-            Những cột mốc trên con đường tích lũy kiến thức chuyên môn.
+            {t.education.subtitle}
           </p>
 
           <div className="mt-14 grid items-start gap-5 md:grid-cols-2">
@@ -385,7 +341,7 @@ export default function HomePage() {
                         rel="noopener noreferrer"
                         className="mt-6 inline-flex items-center gap-1.5 font-mono text-xs text-cyan hover:underline"
                       >
-                        Verify Credential <ArrowRight className="w-3 h-3" />
+                        {t.education.verify} <ArrowRight className="w-3 h-3" />
                       </a>
                     )}
                   </article>
@@ -399,10 +355,10 @@ export default function HomePage() {
       {/* PROJECTS SECTION */}
       <section id="projects" className="section-anchor border-t border-line py-24 outline-none">
         <div className="mx-auto max-w-6xl px-5">
-          <p className="font-mono text-xs uppercase tracking-wider text-magenta">Dự án tiêu biểu</p>
-          <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">Những sản phẩm đã triển khai.</h2>
+          <p className="font-mono text-xs uppercase tracking-wider text-magenta">{t.projects.badge}</p>
+          <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">{t.projects.title}</h2>
           <p className="mt-4 max-w-xl text-muted">
-            Dưới đây là các dự án nổi bật mà tôi chịu trách nhiệm thiết kế hệ thống và phát triển cốt lõi.
+            {t.projects.subtitle}
           </p>
 
           <div className="mt-14 grid gap-5 md:grid-cols-2">
@@ -452,21 +408,15 @@ export default function HomePage() {
       <section id="manifesto" className="section-anchor relative overflow-hidden border-t border-line py-24 outline-none">
         <div className="grid-bg pointer-events-none absolute inset-0 -z-10"></div>
         <div className="mx-auto max-w-3xl px-5">
-          <p className="font-mono text-xs uppercase tracking-wider text-lime">Triết lý</p>
+          <p className="font-mono text-xs uppercase tracking-wider text-lime">{t.manifesto.badge}</p>
           <h2 className="mt-4 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-            <span className="text-gradient">Không chỉ là dòng code.<br/>Là hệ thống bền bỉ.</span>
+            <span className="text-gradient">{t.manifesto.title1}<br/>{t.manifesto.title2}</span>
           </h2>
           
           <div className="mt-10 space-y-6 text-lg leading-relaxed text-muted">
-            <p>
-              Tôi tập trung vào chất lượng kỹ thuật, tính chịu tải và cấu trúc mã nguồn tối ưu. Không xây dựng các giải pháp chắp vá để đạt mục tiêu ngắn hạn.
-            </p>
-            <p>
-              Mỗi dòng code đều được chăm chút, kiểm thử cẩn thận và sẵn sàng mở rộng khi quy mô người dùng tăng nhanh.
-            </p>
-            <p>
-              Hiệu năng thực tế và trải nghiệm lập trình viên tốt (Developer Experience) mới là thước đo thành công cuối cùng của một hệ thống phần mềm.
-            </p>
+            {t.manifesto.paragraphs.map((paragraph, idx) => (
+              <p key={idx}>{paragraph}</p>
+            ))}
           </div>
         </div>
       </section>
@@ -497,19 +447,19 @@ export default function HomePage() {
             <div className="pointer-events-none absolute inset-0 bg-bg/30"></div>
 
             <div className="relative z-10 p-10 sm:p-16">
-              <p className="font-mono text-xs uppercase tracking-wider text-cyan">Bắt đầu cuộc trò chuyện</p>
+              <p className="font-mono text-xs uppercase tracking-wider text-cyan">{t.contact.badge}</p>
               <h2 className="mt-4 max-w-2xl text-4xl font-semibold tracking-tight sm:text-6xl">
-                <span className="text-gradient">Sẵn sàng kiến tạo.</span>
+                <span className="text-gradient">{t.contact.title}</span>
               </h2>
               <p className="mt-5 max-w-lg text-muted">
-                Bạn đang tìm kiếm một backend engineer chuyên sâu, một mobile developer năng lực để cùng xây dựng sản phẩm chất lượng? Hãy kết nối với tôi.
+                {t.contact.subtitle}
               </p>
               
               <a
                 href={`mailto:${owner.email}`}
                 className="mt-8 inline-block rounded-full bg-cyan px-7 py-3 font-mono text-sm font-medium text-bg transition-transform hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(0,245,255,0.4)]"
               >
-                Liên hệ ngay
+                {t.contact.cta}
               </a>
               
               <p className="mt-4 font-mono text-sm text-muted">
